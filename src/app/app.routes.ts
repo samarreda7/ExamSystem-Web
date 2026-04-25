@@ -3,6 +3,7 @@ import { AuthLayoutComponent } from './layouts/auth-layout/auth-layout.component
 import { LoginComponent } from './features/login/login.component';
 import { RegisterComponent } from './features/register/register.component';
 import { MainLayoutComponent } from './layouts/main-layout/main-layout.component';
+import { NotfoundComponent } from './features/notfound/notfound.component';
 
 export const routes: Routes = [
  { path: '', redirectTo: 'login', pathMatch: 'full' },
@@ -18,4 +19,5 @@ export const routes: Routes = [
      path: '',
      component: MainLayoutComponent,
     },
+    { path: '**', component: NotfoundComponent },
 ];
