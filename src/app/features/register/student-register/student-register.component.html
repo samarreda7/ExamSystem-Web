@@ -5,7 +5,7 @@
     Create a student account to access assigned exams and submit answers.
   </p>
 
-  <form class="mt-8 grid gap-5 sm:grid-cols-2">
+  <form class="mt-8 grid gap-5 sm:grid-cols-2" [formGroup]="registerform" (ngSubmit)="onSubmit()">
     <div>
       <label for="student-firstName" class="mb-2 block text-sm font-medium text-slate-200">
         First name
@@ -14,8 +14,17 @@
         id="student-firstName"
         type="text"
         placeholder="First name"
+        formControlName="firstName"
         class="w-full rounded-2xl border border-slate-200/10 bg-slate-800/80 px-4 py-3 text-white outline-none transition placeholder:text-slate-400 focus:border-slate-400 focus:bg-slate-800 focus:ring-4 focus:ring-slate-400/15"
       />
+      @if (registerform.get('firstName')?.invalid && registerform.get('firstName')?.touched) {
+        @if (registerform.get('firstName')?.hasError('required')) {
+          <p class="mt-1 text-xs text-red-400">First name is required.</p>
+        }
+        @if (registerform.get('firstName')?.hasError('minlength')) {
+          <p class="mt-1 text-xs text-red-400">At least 3 characters.</p>
+        }
+      }
     </div>
 
     <div>
@@ -26,8 +35,17 @@
         id="student-lastName"
         type="text"
         placeholder="Last name"
+        formControlName="lastName"
         class="w-full rounded-2xl border border-slate-200/10 bg-slate-800/80 px-4 py-3 text-white outline-none transition placeholder:text-slate-400 focus:border-slate-400 focus:bg-slate-800 focus:ring-4 focus:ring-slate-400/15"
       />
+      @if (registerform.get('lastName')?.invalid && registerform.get('lastName')?.touched) {
+        @if (registerform.get('lastName')?.hasError('required')) {
+          <p class="mt-1 text-xs text-red-400">Last name is required.</p>
+        }
+        @if (registerform.get('lastName')?.hasError('minlength')) {
+          <p class="mt-1 text-xs text-red-400">At least 3 characters.</p>
+        }
+      }
     </div>
 
     <div class="sm:col-span-2">
@@ -36,8 +54,17 @@
         id="student-email"
         type="email"
         placeholder="name@example.com"
+        formControlName="email"
         class="w-full rounded-2xl border border-slate-200/10 bg-slate-800/80 px-4 py-3 text-white outline-none transition placeholder:text-slate-400 focus:border-slate-400 focus:bg-slate-800 focus:ring-4 focus:ring-slate-400/15"
       />
+      @if (registerform.get('email')?.invalid && registerform.get('email')?.touched) {
+        @if (registerform.get('email')?.hasError('required')) {
+          <p class="mt-1 text-xs text-red-400">Email is required.</p>
+        }
+        @if (registerform.get('email')?.hasError('email')) {
+          <p class="mt-1 text-xs text-red-400">Enter a valid email address.</p>
+        }
+      }
     </div>
 
     <div class="sm:col-span-2">
@@ -48,8 +75,17 @@
         id="student-username"
         type="text"
         placeholder="Choose a username"
+        formControlName="username"
         class="w-full rounded-2xl border border-slate-200/10 bg-slate-800/80 px-4 py-3 text-white outline-none transition placeholder:text-slate-400 focus:border-slate-400 focus:bg-slate-800 focus:ring-4 focus:ring-slate-400/15"
       />
+      @if (registerform.get('username')?.invalid && registerform.get('username')?.touched) {
+        @if (registerform.get('username')?.hasError('required')) {
+          <p class="mt-1 text-xs text-red-400">Username is required.</p>
+        }
+        @if (registerform.get('username')?.hasError('minlength')) {
+          <p class="mt-1 text-xs text-red-400">At least 3 characters.</p>
+        }
+      }
     </div>
 
     <div>
@@ -60,8 +96,17 @@
         id="student-password"
         type="password"
         placeholder="Create a password"
+        formControlName="password"
         class="w-full rounded-2xl border border-slate-200/10 bg-slate-800/80 px-4 py-3 text-white outline-none transition placeholder:text-slate-400 focus:border-slate-400 focus:bg-slate-800 focus:ring-4 focus:ring-slate-400/15"
       />
+      @if (registerform.get('password')?.invalid && registerform.get('password')?.touched) {
+        @if (registerform.get('password')?.hasError('required')) {
+          <p class="mt-1 text-xs text-red-400">Password is required.</p>
+        }
+        @if (registerform.get('password')?.hasError('pattern')) {
+          <p class="mt-1 text-xs text-red-400">Min 8 chars, upper, lower, number & special character.</p>
+        }
+      }
     </div>
 
     <div>
@@ -72,8 +117,17 @@
         id="student-confirmPassword"
         type="password"
         placeholder="Confirm your password"
+        formControlName="rePassword"
         class="w-full rounded-2xl border border-slate-200/10 bg-slate-800/80 px-4 py-3 text-white outline-none transition placeholder:text-slate-400 focus:border-slate-400 focus:bg-slate-800 focus:ring-4 focus:ring-slate-400/15"
       />
+      @if (registerform.get('rePassword')?.touched) {
+        @if (registerform.get('rePassword')?.hasError('required')) {
+          <p class="mt-1 text-xs text-red-400">Please confirm your password.</p>
+        }
+        @if (registerform.get('rePassword')?.hasError('mismatch')) {
+          <p class="mt-1 text-xs text-red-400">Passwords do not match.</p>
+        }
+      }
     </div>
 
     <div>
@@ -84,14 +138,24 @@
         id="student-phoneNumber"
         type="tel"
         placeholder="+20 100 000 0000"
+        formControlName="phoneNumber"
         class="w-full rounded-2xl border border-slate-200/10 bg-slate-800/80 px-4 py-3 text-white outline-none transition placeholder:text-slate-400 focus:border-slate-400 focus:bg-slate-800 focus:ring-4 focus:ring-slate-400/15"
       />
+      @if (registerform.get('phoneNumber')?.invalid && registerform.get('phoneNumber')?.touched) {
+        @if (registerform.get('phoneNumber')?.hasError('required')) {
+          <p class="mt-1 text-xs text-red-400">Phone number is required.</p>
+        }
+        @if (registerform.get('phoneNumber')?.hasError('pattern')) {
+          <p class="mt-1 text-xs text-red-400">Enter a valid phone number.</p>
+        }
+      }
     </div>
 
     <div class="sm:col-span-2">
       <button
         type="submit"
-        class="w-full rounded-2xl bg-slate-200 px-4 py-3 text-sm font-semibold text-slate-900 shadow-lg shadow-slate-950/30 transition hover:bg-white"
+        [disabled]="registerform.invalid"
+        class="w-full rounded-2xl bg-slate-200 px-4 py-3 text-sm font-semibold text-slate-900 shadow-lg shadow-slate-950/30 transition hover:bg-white disabled:cursor-not-allowed disabled:opacity-50"
       >
         Create student account
       </button>
