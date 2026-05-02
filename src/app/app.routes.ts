@@ -6,6 +6,8 @@ import { StudentRegisterComponent } from './features/register/student-register/s
 import { TeacherRegisterComponent } from './features/register/teacher-register/teacher-register.component';
 import { MainLayoutComponent } from './layouts/main-layout/main-layout.component';
 import { NotfoundComponent } from './features/notfound/notfound.component';
+import { authGuard } from './core/auth/guards/auth-guard';
+import { roleGuard } from './core/auth/guards/role-guard';
 
 export const routes: Routes = [
  { path: '', redirectTo: 'login', pathMatch: 'full' },
@@ -25,9 +27,33 @@ export const routes: Routes = [
       },
     ],
    },
-    {
-     path: '',
-     component: MainLayoutComponent,
-    },
+   {
+    path: '',
+    component: MainLayoutComponent,
+    canActivate: [authGuard],
+    children: [
+
+      // Student section
+      {
+        path: 'student',
+        canActivate: [roleGuard('Student')],
+        children: [
+          // add student pages here later
+          // { path: 'dashboard', component: StudentDashboardComponent },
+        ],
+      },
+
+      // Teacher section
+      {
+        path: 'teacher',
+        canActivate: [roleGuard('Teacher')],
+        children: [
+          // add teacher pages here later
+          // { path: 'dashboard', component: TeacherDashboardComponent },
+        ],
+      },
+
+    ],
+  },
     { path: '**', component: NotfoundComponent },
 ];
