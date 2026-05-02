@@ -1,0 +1,108 @@
+<div>
+  <p class="text-sm font-semibold uppercase tracking-[0.3em] text-slate-300">Teacher</p>
+  <h2 class="mt-3 text-3xl font-bold tracking-tight text-white">Teacher registration</h2>
+  <p class="mt-3 text-sm leading-6 text-slate-400">
+    Create a teacher account to manage groups, students, and exams.
+  </p>
+
+  <form class="mt-8 grid gap-5 sm:grid-cols-2">
+    <div>
+      <label for="teacher-firstName" class="mb-2 block text-sm font-medium text-slate-200">
+        First name
+      </label>
+      <input
+        id="teacher-firstName"
+        type="text"
+        placeholder="First name"
+        class="w-full rounded-2xl border border-slate-200/10 bg-slate-800/80 px-4 py-3 text-white outline-none transition placeholder:text-slate-400 focus:border-slate-400 focus:bg-slate-800 focus:ring-4 focus:ring-slate-400/15"
+      />
+    </div>
+
+    <div>
+      <label for="teacher-lastName" class="mb-2 block text-sm font-medium text-slate-200">
+        Last name
+      </label>
+      <input
+        id="teacher-lastName"
+        type="text"
+        placeholder="Last name"
+        class="w-full rounded-2xl border border-slate-200/10 bg-slate-800/80 px-4 py-3 text-white outline-none transition placeholder:text-slate-400 focus:border-slate-400 focus:bg-slate-800 focus:ring-4 focus:ring-slate-400/15"
+      />
+    </div>
+
+    <div class="sm:col-span-2">
+      <label for="teacher-email" class="mb-2 block text-sm font-medium text-slate-200">Email</label>
+      <input
+        id="teacher-email"
+        type="email"
+        placeholder="name@example.com"
+        class="w-full rounded-2xl border border-slate-200/10 bg-slate-800/80 px-4 py-3 text-white outline-none transition placeholder:text-slate-400 focus:border-slate-400 focus:bg-slate-800 focus:ring-4 focus:ring-slate-400/15"
+      />
+    </div>
+
+    <div class="sm:col-span-2">
+      <label for="teacher-username" class="mb-2 block text-sm font-medium text-slate-200">
+        Username
+      </label>
+      <input
+        id="teacher-username"
+        type="text"
+        placeholder="Choose a username"
+        class="w-full rounded-2xl border border-slate-200/10 bg-slate-800/80 px-4 py-3 text-white outline-none transition placeholder:text-slate-400 focus:border-slate-400 focus:bg-slate-800 focus:ring-4 focus:ring-slate-400/15"
+      />
+    </div>
+
+    <div>
+      <label for="teacher-password" class="mb-2 block text-sm font-medium text-slate-200">
+        Password
+      </label>
+      <input
+        id="teacher-password"
+        type="password"
+        placeholder="Create a password"
+        class="w-full rounded-2xl border border-slate-200/10 bg-slate-800/80 px-4 py-3 text-white outline-none transition placeholder:text-slate-400 focus:border-slate-400 focus:bg-slate-800 focus:ring-4 focus:ring-slate-400/15"
+      />
+    </div>
+
+    <div>
+      <label for="teacher-phoneNumber" class="mb-2 block text-sm font-medium text-slate-200">
+        Phone number
+      </label>
+      <input
+        id="teacher-phoneNumber"
+        type="tel"
+        placeholder="+20 100 000 0000"
+        class="w-full rounded-2xl border border-slate-200/10 bg-slate-800/80 px-4 py-3 text-white outline-none transition placeholder:text-slate-400 focus:border-slate-400 focus:bg-slate-800 focus:ring-4 focus:ring-slate-400/15"
+      />
+    </div>
+
+    <div class="sm:col-span-2">
+      <label for="teacher-subjectId" class="mb-2 block text-sm font-medium text-slate-200">
+        Subject
+      </label>
+      <select
+        id="teacher-subjectId"
+        class="w-full rounded-2xl border border-slate-200/10 bg-slate-800/80 px-4 py-3 text-white outline-none transition focus:border-slate-400 focus:bg-slate-800 focus:ring-4 focus:ring-slate-400/15"
+      >
+        <option value="" class="bg-slate-800 text-slate-400">
+          Select a subject
+        </option>
+        @for (subject of subjectlist ; track subject.id) {
+          <option [value]="subject.id" class="bg-slate-800 text-white">
+            {{ subject.name }}
+             
+          </option>
+        }
+      </select>
+    </div>
+
+    <div class="sm:col-span-2">
+      <button
+        type="submit"
+        class="w-full rounded-2xl bg-slate-200 px-4 py-3 text-sm font-semibold text-slate-900 shadow-lg shadow-slate-950/30 transition hover:bg-white"
+      >
+        Create teacher account
+      </button>
+    </div>
+  </form>
+</div>
