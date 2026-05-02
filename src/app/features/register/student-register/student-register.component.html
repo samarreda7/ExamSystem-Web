@@ -1,0 +1,88 @@
+<div>
+  <p class="text-sm font-semibold uppercase tracking-[0.3em] text-slate-300">Student</p>
+  <h2 class="mt-3 text-3xl font-bold tracking-tight text-white">Student registration</h2>
+  <p class="mt-3 text-sm leading-6 text-slate-400">
+    Create a student account to access assigned exams and submit answers.
+  </p>
+
+  <form class="mt-8 grid gap-5 sm:grid-cols-2">
+    <div>
+      <label for="student-firstName" class="mb-2 block text-sm font-medium text-slate-200">
+        First name
+      </label>
+      <input
+        id="student-firstName"
+        type="text"
+        placeholder="First name"
+        class="w-full rounded-2xl border border-slate-200/10 bg-slate-800/80 px-4 py-3 text-white outline-none transition placeholder:text-slate-400 focus:border-slate-400 focus:bg-slate-800 focus:ring-4 focus:ring-slate-400/15"
+      />
+    </div>
+
+    <div>
+      <label for="student-lastName" class="mb-2 block text-sm font-medium text-slate-200">
+        Last name
+      </label>
+      <input
+        id="student-lastName"
+        type="text"
+        placeholder="Last name"
+        class="w-full rounded-2xl border border-slate-200/10 bg-slate-800/80 px-4 py-3 text-white outline-none transition placeholder:text-slate-400 focus:border-slate-400 focus:bg-slate-800 focus:ring-4 focus:ring-slate-400/15"
+      />
+    </div>
+
+    <div class="sm:col-span-2">
+      <label for="student-email" class="mb-2 block text-sm font-medium text-slate-200">Email</label>
+      <input
+        id="student-email"
+        type="email"
+        placeholder="name@example.com"
+        class="w-full rounded-2xl border border-slate-200/10 bg-slate-800/80 px-4 py-3 text-white outline-none transition placeholder:text-slate-400 focus:border-slate-400 focus:bg-slate-800 focus:ring-4 focus:ring-slate-400/15"
+      />
+    </div>
+
+    <div class="sm:col-span-2">
+      <label for="student-username" class="mb-2 block text-sm font-medium text-slate-200">
+        Username
+      </label>
+      <input
+        id="student-username"
+        type="text"
+        placeholder="Choose a username"
+        class="w-full rounded-2xl border border-slate-200/10 bg-slate-800/80 px-4 py-3 text-white outline-none transition placeholder:text-slate-400 focus:border-slate-400 focus:bg-slate-800 focus:ring-4 focus:ring-slate-400/15"
+      />
+    </div>
+
+    <div>
+      <label for="student-password" class="mb-2 block text-sm font-medium text-slate-200">
+        Password
+      </label>
+      <input
+        id="student-password"
+        type="password"
+        placeholder="Create a password"
+        class="w-full rounded-2xl border border-slate-200/10 bg-slate-800/80 px-4 py-3 text-white outline-none transition placeholder:text-slate-400 focus:border-slate-400 focus:bg-slate-800 focus:ring-4 focus:ring-slate-400/15"
+      />
+    </div>
+
+    <div>
+      <label for="student-phoneNumber" class="mb-2 block text-sm font-medium text-slate-200">
+        Phone number
+      </label>
+      <input
+        id="student-phoneNumber"
+        type="tel"
+        placeholder="+20 100 000 0000"
+        class="w-full rounded-2xl border border-slate-200/10 bg-slate-800/80 px-4 py-3 text-white outline-none transition placeholder:text-slate-400 focus:border-slate-400 focus:bg-slate-800 focus:ring-4 focus:ring-slate-400/15"
+      />
+    </div>
+
+    <div class="sm:col-span-2">
+      <button
+        type="submit"
+        class="w-full rounded-2xl bg-slate-200 px-4 py-3 text-sm font-semibold text-slate-900 shadow-lg shadow-slate-950/30 transition hover:bg-white"
+      >
+        Create student account
+      </button>
+    </div>
+  </form>
+</div>

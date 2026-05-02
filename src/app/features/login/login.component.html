@@ -1,1 +1,88 @@
-<p>login works!</p>
+<main class="min-h-screen bg-[radial-gradient(circle_at_top,_#334155_0%,_#1e293b_38%,_#0f172a_100%)] px-6 py-10">
+  <div class="mx-auto flex min-h-screen max-w-6xl items-center justify-center">
+    <div
+      class="grid w-full max-w-5xl overflow-hidden rounded-[2rem] border border-slate-200/10 bg-slate-900/75 shadow-2xl shadow-slate-950/50 backdrop-blur lg:grid-cols-[1.05fr_0.95fr]"
+    >
+      <section class="hidden bg-[linear-gradient(180deg,_#334155_0%,_#1e3a8a_45%,_#0f172a_100%)] p-10 text-white lg:flex lg:flex-col lg:justify-between">
+        <div>
+          <p
+            class="inline-flex rounded-full border border-white/15 bg-white/10 px-4 py-1 text-sm font-medium text-slate-100"
+          >
+            Examly
+          </p>
+          <h1 class="mt-8 text-4xl font-bold leading-tight">
+            Manage groups, students, and exams with ease
+          </h1>
+          <p class="mt-4 max-w-md text-base leading-7 text-slate-300">
+            Teachers can create groups, add students, and assign exams. Students can sign in
+            to complete their assigned tests.
+          </p>
+        </div>
+
+        <div class="grid gap-4 rounded-3xl border border-white/10 bg-white/5 p-6">
+          <div class="rounded-2xl bg-white/10 p-4">
+            <p class="text-sm text-slate-300">Quick access</p>
+            <p class="mt-1 text-lg font-semibold">Groups, exams, and submissions</p>
+          </div>
+          <div class="rounded-2xl bg-white/10 p-4">
+            <p class="text-sm text-slate-300">Built for</p>
+            <p class="mt-1 text-lg font-semibold">Teachers and students</p>
+          </div>
+        </div>
+      </section>
+
+      <section class="flex items-center justify-center p-6 sm:p-10 lg:p-12">
+        <div class="w-full max-w-md">
+          <p class="text-sm font-semibold uppercase tracking-[0.3em] text-slate-300">Login</p>
+          <h2 class="mt-3 text-3xl font-bold tracking-tight text-white">
+            Sign in to your account
+          </h2>
+          <p class="mt-3 text-sm leading-6 text-slate-300">
+            Enter your email and password to manage exams and groups or complete your assigned tests.
+          </p>
+
+          <form class="mt-8 space-y-5">
+            <div>
+              <label for="email" class="mb-2 block text-sm font-medium text-slate-200">Email</label>
+              <input
+                id="email"
+                type="email"
+                placeholder="name@example.com"
+                class="w-full rounded-2xl border border-slate-200/10 bg-slate-800/80 px-4 py-3 text-white outline-none transition placeholder:text-slate-400 focus:border-slate-400 focus:bg-slate-800 focus:ring-4 focus:ring-slate-400/15"
+              />
+            </div>
+
+            <div>
+              <div class="mb-2 flex items-center justify-between">
+                <label for="password" class="block text-sm font-medium text-slate-200">Password</label>
+                <button type="button" class="text-sm font-medium text-slate-300 hover:text-white">
+                  Forgot password?
+                </button>
+              </div>
+              <input
+                id="password"
+                type="password"
+                placeholder="Enter your password"
+                class="w-full rounded-2xl border border-slate-200/10 bg-slate-800/80 px-4 py-3 text-white outline-none transition placeholder:text-slate-400 focus:border-slate-400 focus:bg-slate-800 focus:ring-4 focus:ring-slate-400/15"
+              />
+            </div>
+
+            <button
+              type="submit"
+              class="w-full rounded-2xl bg-slate-200 px-4 py-3 text-sm font-semibold text-slate-900 shadow-lg shadow-slate-950/30 transition hover:bg-white"
+            >
+              Sign In
+            </button>
+          </form>
+
+          <p class="mt-6 text-center text-sm text-slate-400">
+            Don't have an account?
+            <a routerLink="/register" class="font-semibold text-slate-200 hover:text-white">
+              Create one
+            </a>
+          </p>
+        </div>
+      </section>
+    </div>
+  </div>
+</main>
