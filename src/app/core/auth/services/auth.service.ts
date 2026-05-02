@@ -14,4 +14,15 @@ export class AuthService {
     return this.httpClient.post(environment.baseUrl + 'Student/add', data,
       {responseType: 'text'});
   }
+
+  signIn(data : object): Observable<any> {
+        return this.httpClient.post(environment.baseUrl + 'Auth/login', data);
+  }
+  getRole(): string | null {
+  return localStorage.getItem('Examrole');
+}
+
+isLoggedIn(): boolean {
+  return !!localStorage.getItem('Examtoken');
+}
 }
