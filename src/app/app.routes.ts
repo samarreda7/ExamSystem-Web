@@ -8,6 +8,9 @@ import { MainLayoutComponent } from './layouts/main-layout/main-layout.component
 import { NotfoundComponent } from './features/notfound/notfound.component';
 import { authGuard } from './core/auth/guards/auth-guard';
 import { roleGuard } from './core/auth/guards/role-guard';
+import { DashboardComponent } from './features/student/dashboard/dashboard.component';
+import { DashboardComponent as StudentDashboardComponent } from './features/student/dashboard/dashboard.component';
+import { DashboardComponent as TeacherDashboardComponent } from './features/teacher/dashboard/dashboard.component';
 
 export const routes: Routes = [
  { path: '', redirectTo: 'login', pathMatch: 'full' },
@@ -38,8 +41,8 @@ export const routes: Routes = [
         path: 'student',
         canActivate: [roleGuard('Student')],
         children: [
-          // add student pages here later
-          // { path: 'dashboard', component: StudentDashboardComponent },
+          
+          { path: 'dashboard', component:StudentDashboardComponent  },
         ],
       },
 
@@ -48,8 +51,8 @@ export const routes: Routes = [
         path: 'teacher',
         canActivate: [roleGuard('Teacher')],
         children: [
-          // add teacher pages here later
-          // { path: 'dashboard', component: TeacherDashboardComponent },
+          
+          { path: 'dashboard', component:TeacherDashboardComponent },
         ],
       },
 
