@@ -10,11 +10,15 @@ import { environment } from '../../../../environments/environment.development';
 export class AuthService {
   private readonly httpClient = inject(HttpClient);
 
+  //Student signup
   signUp(data: object): Observable<any> {
     return this.httpClient.post(environment.baseUrl + 'Student/add', data,
       {responseType: 'text'});
   }
-
+  signUpTeacher(data: object): Observable<any>{
+     return this.httpClient.post(environment.baseUrl + 'Teacher/add', data,
+      {responseType: 'text'});
+  }
   signIn(data : object): Observable<any> {
         return this.httpClient.post(environment.baseUrl + 'Auth/login', data);
   }
