@@ -1,0 +1,43 @@
+<nav
+  class="flex items-center justify-between gap-[1.1rem] rounded-[1.35rem] border border-slate-200/10 bg-[radial-gradient(circle_at_top_left,_rgba(51,65,85,0.45),_transparent_34%),radial-gradient(circle_at_bottom_right,_rgba(30,58,138,0.38),_transparent_32%),linear-gradient(135deg,_rgba(15,23,42,0.96)_0%,_rgba(30,41,59,0.94)_100%)] px-[1.2rem] py-3 shadow-[0_18px_40px_rgba(2,6,23,0.34)] max-[700px]:flex-col max-[700px]:items-stretch max-[700px]:px-4 max-[700px]:py-[0.85rem]"
+>
+  <div class="flex min-w-0 items-center gap-3">
+    <div
+      class="grid h-[2.85rem] w-[2.85rem] place-items-center overflow-hidden rounded-[0.9rem] border border-white/10 bg-white shadow-[0_10px_22px_rgba(15,23,42,0.32)]"
+    >
+      <img src="/Images/examly-logo.jpg" alt="Examly logo" />
+    </div>
+    <div>
+      <p class="m-0 text-[0.72rem] font-bold uppercase tracking-[0.16em] text-slate-400">
+        Smart exam space
+      </p>
+      <h1 class="m-0 text-[1.5rem] font-extrabold leading-[1.05] tracking-[-0.04em] text-slate-50">
+        Examly
+      </h1>
+    </div>
+  </div>
+
+  <div
+    class="flex items-center gap-3 rounded-[1.1rem] border border-slate-200/10 bg-white/8 px-[0.9rem] py-2 backdrop-blur-[10px] max-[700px]:justify-between"
+  >
+    <div class="text-right max-[700px]:text-left">
+      <span
+        class="mb-[0.3rem] inline-block rounded-full bg-white/10 px-[0.65rem] py-[0.24rem] text-[0.67rem] font-bold uppercase tracking-[0.08em] text-slate-200"
+      >
+        {{ roleLabel }}
+      </span>
+
+      <h2 class="m-0 text-base font-bold leading-[1.2] text-slate-50">{{ fullName }}</h2>
+    </div>
+
+    <div
+      class="h-[3.3rem] w-[3.3rem] shrink-0 rounded-2xl bg-[linear-gradient(180deg,_#334155_0%,_#1e3a8a_70%,_#0f172a_100%)] p-[0.16rem] shadow-[0_10px_22px_rgba(15,23,42,0.28)]"
+    >
+      <img
+        class="block h-full w-full rounded-[0.86rem] object-cover"
+        [src]="avatarPath"
+        [alt]="roleLabel + ' profile image'"
+      />
+    </div>
+  </div>
+</nav>
