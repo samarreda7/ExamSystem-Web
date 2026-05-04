@@ -3,6 +3,7 @@ import { StudentService } from '../../../core/auth/services/student.service';
 import { TeacherService } from '../../../core/auth/services/teacher.service';
 import { Studentinfo } from '../../../core/models/studentinfo.interface';
 import { Teacherinfo } from '../../../core/models/teacherinfo.interface';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-navbar',
@@ -12,7 +13,7 @@ import { Teacherinfo } from '../../../core/models/teacherinfo.interface';
 export class NavbarComponent implements OnInit {
   private readonly studentService = inject(StudentService);
   private readonly teacherService = inject(TeacherService);
-
+  private readonly router = inject(Router);
   userId: string = localStorage.getItem('ExamuserId') ?? '';
   userRole: string = localStorage.getItem('Examrole') ?? '';
   studentInfo: Studentinfo | null = null;
@@ -65,5 +66,12 @@ export class NavbarComponent implements OnInit {
         console.log(err);
       },
     });
+  }
+
+  logout() {
+    localStorage.removeItem('Examtoken');
+    localStorage.removeItem('Examrole');
+    localStorage.removeItem('ExamuserId');
+    this.router.navigate(['/login']);
   }
 }
