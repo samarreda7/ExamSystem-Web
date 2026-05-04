@@ -10,12 +10,14 @@ import { authGuard } from './core/auth/guards/auth-guard';
 import { roleGuard } from './core/auth/guards/role-guard';
 import { StudentDashboardComponent } from './features/student/student-dashboard/student-dashboard.component';
 import { TeacherDashboardComponent } from './features/teacher/teacher-dashboard/teacher-dashboard.component';
+import { guestGuard } from './core/auth/guards/guest-guard';
 
 export const routes: Routes = [
  { path: '', redirectTo: 'login', pathMatch: 'full' },
     {
      path: '',
      component: AuthLayoutComponent,
+     canActivate:[guestGuard],
      children: [
       { path: 'login', component: LoginComponent },
       {
