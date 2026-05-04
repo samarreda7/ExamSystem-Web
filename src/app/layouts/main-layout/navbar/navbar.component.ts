@@ -3,11 +3,11 @@ import { StudentService } from '../../../core/auth/services/student.service';
 import { TeacherService } from '../../../core/auth/services/teacher.service';
 import { Studentinfo } from '../../../core/models/studentinfo.interface';
 import { Teacherinfo } from '../../../core/models/teacherinfo.interface';
-import { Router } from '@angular/router';
+import { Router, RouterLink, RouterLinkActive } from '@angular/router';
 
 @Component({
   selector: 'app-navbar',
-  imports: [],
+  imports: [RouterLink, RouterLinkActive],
   templateUrl: './navbar.component.html',
 })
 export class NavbarComponent implements OnInit {
@@ -44,6 +44,10 @@ export class NavbarComponent implements OnInit {
 
   get roleLabel(): string {
     return this.userRole || 'User';
+  }
+
+  get baseRoute(): string {
+    return this.userRole === 'Teacher' ? '/teacher' : '/student';
   }
 
   getStudentInfo() {

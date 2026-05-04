@@ -18,6 +18,35 @@
   </div>
 
   <div
+    class="flex flex-wrap items-center justify-center gap-2 rounded-[1.1rem] border border-slate-200/10 bg-white/6 px-3 py-2 backdrop-blur-[10px]"
+  >
+    <a
+      [routerLink]="baseRoute + '/home'"
+      routerLinkActive="bg-slate-100 text-slate-900 shadow-[0_8px_18px_rgba(15,23,42,0.22)]"
+      [routerLinkActiveOptions]="{ exact: true }"
+      class="rounded-full px-4 py-2 text-sm font-semibold text-slate-200 transition hover:bg-white/10 hover:text-white"
+    >
+      Home
+    </a>
+    <a
+      [routerLink]="baseRoute + '/exams'"
+      routerLinkActive="bg-slate-100 text-slate-900 shadow-[0_8px_18px_rgba(15,23,42,0.22)]"
+      [routerLinkActiveOptions]="{ exact: true }"
+      class="rounded-full px-4 py-2 text-sm font-semibold text-slate-200 transition hover:bg-white/10 hover:text-white"
+    >
+      Exams
+    </a>
+    <a
+      [routerLink]="baseRoute + '/groups'"
+      routerLinkActive="bg-slate-100 text-slate-900 shadow-[0_8px_18px_rgba(15,23,42,0.22)]"
+      [routerLinkActiveOptions]="{ exact: true }"
+      class="rounded-full px-4 py-2 text-sm font-semibold text-slate-200 transition hover:bg-white/10 hover:text-white"
+    >
+      Groups
+    </a>
+  </div>
+
+  <div
     class="flex items-center gap-3 rounded-[1.1rem] border border-slate-200/10 bg-white/8 px-[0.9rem] py-2 backdrop-blur-[10px] max-[700px]:justify-between"
   >
     <div class="text-right max-[700px]:text-left">

@@ -8,9 +8,13 @@ import { MainLayoutComponent } from './layouts/main-layout/main-layout.component
 import { NotfoundComponent } from './features/notfound/notfound.component';
 import { authGuard } from './core/auth/guards/auth-guard';
 import { roleGuard } from './core/auth/guards/role-guard';
-import { StudentDashboardComponent } from './features/student/student-dashboard/student-dashboard.component';
-import { TeacherDashboardComponent } from './features/teacher/teacher-dashboard/teacher-dashboard.component';
 import { guestGuard } from './core/auth/guards/guest-guard';
+import { HomeComponent as StudentHomeComponent } from './features/student/student-dashboard/home/home.component';
+import { ExamsComponent as StudentExamsComponent } from './features/student/student-dashboard/exams/exams.component';
+import { GroupsComponent as StudentGroupsComponent } from './features/student/student-dashboard/groups/groups.component';
+import { HomeComponent as TeacherHomeComponent } from './features/teacher/teacher-dashboard/home/home.component';
+import { ExamsComponent as TeacherExamsComponent } from './features/teacher/teacher-dashboard/exams/exams.component';
+import { GroupsComponent as TeacherGroupsComponent } from './features/teacher/teacher-dashboard/groups/groups.component';
 
 export const routes: Routes = [
  { path: '', redirectTo: 'login', pathMatch: 'full' },
@@ -42,8 +46,11 @@ export const routes: Routes = [
         path: 'student',
         canActivate: [roleGuard('Student')],
         children: [
-          
-          { path: 'dashboard', component: StudentDashboardComponent },
+          { path: '', redirectTo: 'home', pathMatch: 'full' },
+          { path: 'dashboard', redirectTo: 'home', pathMatch: 'full' },
+          { path: 'home', component: StudentHomeComponent },
+          { path: 'exams', component: StudentExamsComponent },
+          { path: 'groups', component: StudentGroupsComponent },
         ],
       },
 
@@ -52,8 +59,11 @@ export const routes: Routes = [
         path: 'teacher',
         canActivate: [roleGuard('Teacher')],
         children: [
-          
-          { path: 'dashboard', component: TeacherDashboardComponent },
+          { path: '', redirectTo: 'home', pathMatch: 'full' },
+          { path: 'dashboard', redirectTo: 'home', pathMatch: 'full' },
+          { path: 'home', component: TeacherHomeComponent },
+          { path: 'exams', component: TeacherExamsComponent },
+          { path: 'groups', component: TeacherGroupsComponent },
         ],
       },
 

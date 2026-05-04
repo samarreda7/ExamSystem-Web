@@ -32,9 +32,9 @@ export class LoginComponent {
           localStorage.setItem('Examrole', res.role);
           localStorage.setItem('ExamuserId', res.userId);
           if (res.role === 'Student') {
-            this.router.navigate(['/student/dashboard']);
+            this.router.navigate(['/student/home']);
           } else if (res.role === 'Teacher') {
-            this.router.navigate(['/teacher/dashboard']);
+            this.router.navigate(['/teacher/home']);
           }
         },
         error: (err) => {
