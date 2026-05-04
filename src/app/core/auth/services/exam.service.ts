@@ -9,7 +9,7 @@ import { environment } from '../../../../environments/environment.development';
 export class ExamService {
   private readonly httpClient = inject(HttpClient);
 
-  getExamCount(): Observable<any> {
-    return this.httpClient.get(environment.baseUrl + 'api/Exam/count');
+  getTeacherExamCount(): Observable<any> {
+    return this.httpClient.get(environment.baseUrl + 'Exam/count');
   }
 }
