@@ -5,7 +5,7 @@ import { TeacherService } from '../../../../core/auth/services/teacher.service';
 import { Teacherinfo } from '../../../../core/models/teacherinfo.interface';
 
 @Component({
-  selector: 'app-home',
+  selector: 'app-teacher-home',
   imports: [],
   templateUrl: './home.component.html',
   styleUrl: './home.component.css',
