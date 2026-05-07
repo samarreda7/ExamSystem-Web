@@ -25,4 +25,8 @@ export class ExamService {
   DeleteExam(id: string): Observable<string> {
     return this.httpClient.delete(environment.baseUrl + `Exam/${id}`, { responseType: 'text' });
   }
+
+  UpdateExamName(id: string, name: string): Observable<string> {
+    return this.httpClient.put(environment.baseUrl + `Exam/${id}`, { name }, { responseType: 'text' });
+  }
 }
