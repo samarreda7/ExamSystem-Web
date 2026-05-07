@@ -15,8 +15,11 @@ export class ExamsComponent implements OnInit {
   private feedbackTimeoutId: ReturnType<typeof setTimeout> | null = null;
   Exams: Exams[] = [];
   examName = '';
+  editExamId = '';
+  editExamName = '';
   isLoading = false;
   isSubmitting = false;
+  isUpdating = false;
   deletingExamId = '';
   feedbackMessage = '';
   feedbackType: 'success' | 'error' | '' = '';
@@ -103,6 +106,41 @@ export class ExamsComponent implements OnInit {
         console.log(err);
         this.deletingExamId = '';
         this.setFeedback('Unable to delete the exam right now.', 'error');
+      },
+    });
+  }
+
+  openEditModal(exam: Exams) {
+    this.editExamId = exam.id;
+    this.editExamName = exam.name;
+  }
+
+  closeEditModal() {
+    this.editExamId = '';
+    this.editExamName = '';
+    this.isUpdating = false;
+  }
+
+  UpdateExam() {
+    const trimmedName = this.editExamName.trim();
+
+    if (!trimmedName || !this.editExamId) {
+      this.setFeedback('Please enter a valid exam name before updating.', 'error');
+      return;
+    }
+
+    this.isUpdating = true;
+    this.examService.UpdateExamName(this.editExamId, trimmedName).subscribe({
+      next: (res) => {
+        console.log(res);
+        this.setFeedback('Exam updated successfully.', 'success');
+        this.closeEditModal();
+        this.getAllTeacherExam();
+      },
+      error: (err) => {
+        console.log(err);
+        this.isUpdating = false;
+        this.setFeedback('Unable to update the exam right now.', 'error');
       },
     });
   }
