@@ -15,6 +15,7 @@ import { GroupsComponent as StudentGroupsComponent } from './features/student/st
 import { HomeComponent as TeacherHomeComponent } from './features/teacher/teacher-dashboard/home/home.component';
 import { ExamsComponent as TeacherExamsComponent } from './features/teacher/teacher-dashboard/exams/exams.component';
 import { GroupsComponent as TeacherGroupsComponent } from './features/teacher/teacher-dashboard/groups/groups.component';
+import { QuestionsComponent } from './features/teacher/teacher-dashboard/exams/questions/questions.component';
 
 export const routes: Routes = [
  { path: '', redirectTo: 'login', pathMatch: 'full' },
@@ -63,6 +64,7 @@ export const routes: Routes = [
           { path: 'dashboard', redirectTo: 'home', pathMatch: 'full' },
           { path: 'home', component: TeacherHomeComponent },
           { path: 'exams', component: TeacherExamsComponent },
+          { path: 'exams/questions', component: QuestionsComponent },
           { path: 'groups', component: TeacherGroupsComponent },
         ],
       },

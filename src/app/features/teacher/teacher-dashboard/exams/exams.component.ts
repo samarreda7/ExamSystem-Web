@@ -1,6 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { Component, inject, OnDestroy, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
+import { Router } from '@angular/router';
 import { ExamService } from '../../../../core/auth/services/exam.service';
 import { Exams } from '../../../../core/models/exams.interface';
 
@@ -12,6 +13,7 @@ import { Exams } from '../../../../core/models/exams.interface';
 })
 export class ExamsComponent implements OnInit {
   private readonly examService = inject(ExamService);
+  private readonly router = inject(Router);
   private feedbackTimeoutId: ReturnType<typeof setTimeout> | null = null;
   Exams: Exams[] = [];
   examName = '';
@@ -107,6 +109,12 @@ export class ExamsComponent implements OnInit {
         this.deletingExamId = '';
         this.setFeedback('Unable to delete the exam right now.', 'error');
       },
+    });
+  }
+
+  goToQuestions(examId: string, examName: string) {
+    this.router.navigate(['/teacher/exams/questions'], {
+      queryParams: { examId, examName },
     });
   }
 
