@@ -24,9 +24,10 @@ export class QuestionsComponent implements OnInit {
   questions: QuestionItem[] = [];
   questionText = '';
   questionType: 0 | 1 = 0;
+  editQuestionId = '';
+  editQuestionText = '';
   isCreatingQuestion = false;
   userId: string = localStorage.getItem('ExamuserId') ?? '';
-
 
   ngOnInit(): void {
     this.activatedRoute.queryParamMap.subscribe((params) => {
@@ -148,6 +149,35 @@ export class QuestionsComponent implements OnInit {
     this.questionService.DeleteQuestion(id).subscribe({
       next: (res) => {
         console.log(res);
+        this.getAllQuestions();
+      },
+      error: (err) => {
+        console.log(err);
+      },
+    });
+  }
+
+  openEditModal(question: QuestionItem) {
+    this.editQuestionId = question.id;
+    this.editQuestionText = question.text;
+  }
+
+  closeEditModal() {
+    this.editQuestionId = '';
+    this.editQuestionText = '';
+  }
+
+  UpdateQuestion() {
+    const trimmedText = this.editQuestionText.trim();
+
+    if (!trimmedText || !this.editQuestionId) {
+      return;
+    }
+
+    this.questionService.UpdateQuestion(this.editQuestionId, trimmedText).subscribe({
+      next: (res) => {
+        console.log(res);
+        this.closeEditModal();
         this.getAllQuestions();
       },
       error: (err) => {

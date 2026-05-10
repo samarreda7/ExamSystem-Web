@@ -48,4 +48,11 @@ export class QuestionService {
       responseType: 'text',
     });
   }
+  UpdateQuestion(id: string, text: string): Observable<string> {
+    return this.httpClient.put(
+      environment.baseUrl + `Question/${id}`,
+      { text },
+      { responseType: 'text' },
+    );
+  }
 }
