@@ -1,10 +1,10 @@
-<section class="mx-auto max-w-6xl px-4 py-6 sm:px-6 lg:px-8">
+<section class="mx-auto max-w-7xl px-3 py-4 sm:px-4 lg:px-5">
   <div
     class="overflow-hidden rounded-[2rem] border border-slate-200/10 bg-slate-900/65 shadow-2xl shadow-slate-950/35 backdrop-blur"
   >
-    <div class="grid gap-6 p-6 lg:grid-cols-[0.95fr_1.35fr] lg:p-8">
+    <div class="grid gap-5 p-4 lg:grid-cols-[0.95fr_1.35fr] lg:p-5">
       <div
-        class="rounded-[1.75rem] bg-[linear-gradient(180deg,_rgba(15,23,42,0.98)_0%,_rgba(30,41,59,0.94)_48%,_rgba(30,64,175,0.82)_100%)] p-6 text-white sm:p-8"
+        class="rounded-[1.75rem] bg-[linear-gradient(180deg,_rgba(15,23,42,0.98)_0%,_rgba(30,41,59,0.94)_48%,_rgba(30,64,175,0.82)_100%)] p-5 text-white sm:p-6"
       >
         <p
           class="inline-flex rounded-full border border-white/15 bg-white/10 px-4 py-1 text-xs font-semibold uppercase tracking-[0.28em] text-slate-200"
@@ -31,7 +31,7 @@
         </div>
       </div>
 
-      <div class="rounded-[1.75rem] border border-slate-200/10 bg-slate-950/45 p-6 sm:p-8">
+      <div class="rounded-[1.75rem] border border-slate-200/10 bg-slate-950/45 p-5 sm:p-6">
         <div class="rounded-3xl border border-slate-200/10 bg-slate-900/50 p-5">
           <p class="text-sm font-semibold uppercase tracking-[0.24em] text-slate-400">
             Add question
@@ -119,6 +119,22 @@
                     <div class="flex flex-col gap-2">
                     <button
                       type="button"
+                      (click)="toggleOptions(question)"
+                      class="inline-flex items-center justify-center gap-2 rounded-2xl border border-slate-200/10 bg-slate-900/70 px-4 py-3 text-sm font-semibold text-slate-100 transition hover:bg-slate-800"
+                    >
+                      <i
+                        class="text-sm"
+                        [ngClass]="
+                          question.isOptionsExpanded
+                            ? 'fa-solid fa-chevron-up'
+                            : 'fa-solid fa-chevron-down'
+                        "
+                      ></i>
+                      {{ question.isOptionsExpanded ? 'Hide Options' : 'Show Options' }}
+                    </button>
+
+                    <button
+                      type="button"
                       (click)="question.isAssigned ? UnAssignQuestionFromExam(question.id) : AssignQuestion(question.id)"
                       class="inline-flex items-center justify-center gap-2 rounded-2xl px-4 py-3 text-sm font-semibold text-white shadow-lg shadow-slate-950/20 transition duration-200 hover:-translate-y-0.5"
                       [ngClass]="
@@ -162,6 +178,115 @@
                     </div>
                   </div>
                 </div>
+
+                @if (question.isOptionsExpanded) {
+                  <div class="mt-5 rounded-3xl border border-slate-200/10 bg-slate-950/35 p-4 sm:p-5">
+                    <div class="flex flex-col gap-4 lg:grid lg:grid-cols-[1.25fr_0.95fr]">
+                      <div>
+                        <div class="flex items-center justify-between gap-3">
+                          <h4 class="text-sm font-semibold uppercase tracking-[0.2em] text-slate-300">
+                            Question options
+                          </h4>
+                          <span class="text-xs text-slate-500">{{ question.options.length }} options</span>
+                        </div>
+
+                        @if (question.optionError) {
+                          <p class="mt-4 rounded-2xl border border-rose-300/20 bg-rose-400/10 px-4 py-3 text-sm text-rose-100">
+                            {{ question.optionError }}
+                          </p>
+                        }
+
+                        @if (question.isLoadingOptions) {
+                          <p class="mt-4 text-sm text-slate-400">Loading options...</p>
+                        } @else if (question.options.length === 0) {
+                          <div class="mt-4 rounded-2xl border border-dashed border-slate-200/10 bg-slate-900/40 p-4 text-sm text-slate-400">
+                            No options added for this question yet.
+                          </div>
+                        } @else {
+                          <div class="mt-4 grid gap-3">
+                            @for (option of question.options; track option.id) {
+                              <div
+                                class="flex flex-col gap-3 rounded-2xl border border-slate-200/10 bg-slate-900/55 p-4 sm:flex-row sm:items-center sm:justify-between"
+                              >
+                                <div>
+                                  <p class="text-sm font-medium text-white">{{ option.text }}</p>
+                                  <p
+                                    class="mt-1 text-xs font-semibold uppercase tracking-[0.18em]"
+                                    [ngClass]="
+                                      option.isCorrect ? 'text-emerald-300' : 'text-slate-400'
+                                    "
+                                  >
+                                    {{ option.isCorrect ? 'Correct option' : 'Wrong option' }}
+                                  </p>
+                                </div>
+
+                                @if (question.teacherOwnerId === userId) {
+                                  <button
+                                    type="button"
+                                    (click)="DeleteOption(question, option.id)"
+                                    [disabled]="question.isDeletingOption === option.id"
+                                    class="inline-flex items-center justify-center gap-2 rounded-2xl border border-rose-300/20 bg-rose-400/10 px-3 py-2.5 text-sm font-medium text-rose-100 transition hover:border-rose-200/40 hover:bg-rose-400/20 disabled:cursor-not-allowed disabled:opacity-60"
+                                  >
+                                    <i class="fa-solid fa-trash-can text-sm"></i>
+                                    {{
+                                      question.isDeletingOption === option.id
+                                        ? 'Deleting...'
+                                        : 'Delete'
+                                    }}
+                                  </button>
+                                }
+                              </div>
+                            }
+                          </div>
+                        }
+                      </div>
+
+                      @if (question.teacherOwnerId === userId) {
+                        <div class="rounded-2xl border border-slate-200/10 bg-slate-900/55 p-4">
+                          <h4 class="text-sm font-semibold uppercase tracking-[0.2em] text-slate-300">
+                            Add option
+                          </h4>
+
+                          <div class="mt-4 grid gap-4">
+                            <label class="block">
+                              <span class="mb-2 block text-sm font-medium text-slate-200">
+                                Option text
+                              </span>
+                              <input
+                                type="text"
+                                [(ngModel)]="question.newOptionText"
+                                class="w-full rounded-2xl border border-slate-200/10 bg-slate-950/80 px-4 py-3 text-white outline-none transition placeholder:text-slate-500 focus:border-blue-400/60"
+                                placeholder="Enter option text"
+                              />
+                            </label>
+
+                            <label class="flex items-center gap-3 rounded-2xl border border-slate-200/10 bg-slate-950/60 px-4 py-3 text-sm text-slate-200">
+                              <input
+                                type="checkbox"
+                                [(ngModel)]="question.newOptionIsCorrect"
+                                class="h-4 w-4 rounded border-slate-500 bg-slate-900 text-blue-500 focus:ring-blue-400"
+                              />
+                              Mark this option as correct
+                            </label>
+                            <button
+                              type="button"
+                              (click)="AddOptionToQuestion(question)"
+                              [disabled]="question.isSubmittingOption || !question.newOptionText.trim()"
+                              class="inline-flex items-center justify-center gap-2 rounded-2xl bg-blue-500 px-4 py-3 text-sm font-semibold text-white transition hover:bg-blue-400 disabled:cursor-not-allowed disabled:bg-slate-700 disabled:text-slate-400"
+                            >
+                              <i class="fa-solid fa-circle-plus text-sm"></i>
+                              {{ question.isSubmittingOption ? 'Adding option...' : 'Add option' }}
+                            </button>
+                          </div>
+                        </div>
+                      } @else {
+                        <div class="rounded-2xl border border-slate-200/10 bg-slate-900/40 p-4 text-sm text-slate-400">
+                          Only the teacher who owns this question can add or delete options.
+                        </div>
+                      }
+                    </div>
+                  </div>
+                }
               </article>
             }
           </div>

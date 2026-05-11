@@ -5,6 +5,8 @@ import { Observable } from 'rxjs';
 import { environment } from '../../../../environments/environment.development';
 import { ShowQuestions } from '../../models/show-questions.interface';
 import { AddQuestion } from '../../models/add-question.interface';
+import { AddOption } from '../../models/add-option.interface';
+import { ShowOption } from '../../models/show-option.interface';
 
 @Injectable({
   providedIn: 'root',
@@ -54,5 +56,18 @@ export class QuestionService {
       { text },
       { responseType: 'text' },
     );
+  }
+  AddOptionToQuuestion(data: AddOption): Observable<string> {
+    return this.httpClient.post(environment.baseUrl + `QuestionOption/assign`, data, {
+      responseType: 'text',
+    });
+  }
+  ShowOption(id: string): Observable<ShowOption[]> {
+    return this.httpClient.get<ShowOption[]>(environment.baseUrl + `QuestionOption/question/${id}`);
+  }
+  DeleteOption(id: string): Observable<string> {
+    return this.httpClient.delete(environment.baseUrl + `QuestionOption/${id}`, {
+      responseType: 'text',
+    });
   }
 }

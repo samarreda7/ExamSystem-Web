@@ -2,13 +2,26 @@ import { AssignQuestion } from './../../../../../core/models/assign-question.int
 import { CommonModule } from '@angular/common';
 import { Component, inject, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
+import { HttpErrorResponse } from '@angular/common/http';
 import { QuestionService } from '../../../../../core/auth/services/question.service';
 import { AddQuestion } from '../../../../../core/models/add-question.interface';
 import { ActivatedRoute } from '@angular/router';
 import { ShowQuestions } from '../../../../../core/models/show-questions.interface';
-import { forkJoin, map, of, switchMap } from 'rxjs';
+import { forkJoin, map, Observable, of, switchMap } from 'rxjs';
+import { AddOption } from '../../../../../core/models/add-option.interface';
+import { ShowOption } from '../../../../../core/models/show-option.interface';
 
-type QuestionItem = ShowQuestions & { isAssigned: boolean };
+type QuestionItem = ShowQuestions & {
+  isAssigned: boolean;
+  isOptionsExpanded: boolean;
+  isLoadingOptions: boolean;
+  options: ShowOption[];
+  newOptionText: string;
+  newOptionIsCorrect: boolean;
+  optionError: string;
+  isSubmittingOption: boolean;
+  isDeletingOption: string | null;
+};
 
 @Component({
   selector: 'app-questions',
@@ -38,13 +51,17 @@ export class QuestionsComponent implements OnInit {
   }
 
   getAllQuestions() {
+    const previousQuestions = new Map(this.questions.map((question) => [question.id, question]));
+
     this.questionService
       .getAllQuestion()
       .pipe(
         switchMap((questions: ShowQuestions[]) => {
           if (!this.selectedExamId) {
             return of(
-              questions.map((question): QuestionItem => ({ ...question, isAssigned: false })),
+              questions.map((question): QuestionItem =>
+                this.buildQuestionItem(question, false, previousQuestions.get(question.id)),
+              ),
             );
           }
 
@@ -52,12 +69,18 @@ export class QuestionsComponent implements OnInit {
             const trimmedQuestionId = question.id.trim();
 
             if (!trimmedQuestionId) {
-              return of<QuestionItem>({ ...question, isAssigned: false });
+              return of<QuestionItem>(
+                this.buildQuestionItem(question, false, previousQuestions.get(question.id)),
+              );
             }
 
             return this.questionService
               .QuestionIsAssignedToCurrentExam(trimmedQuestionId, this.selectedExamId)
-              .pipe(map((isAssigned): QuestionItem => ({ ...question, isAssigned })));
+              .pipe(
+                map((isAssigned): QuestionItem =>
+                  this.buildQuestionItem(question, isAssigned, previousQuestions.get(question.id)),
+                ),
+              );
           });
 
           return forkJoin(questionsWithAssignmentStatus);
@@ -72,6 +95,25 @@ export class QuestionsComponent implements OnInit {
           console.log(err);
         },
       });
+  }
+
+  private buildQuestionItem(
+    question: ShowQuestions,
+    isAssigned: boolean,
+    previousQuestion?: QuestionItem,
+  ): QuestionItem {
+    return {
+      ...question,
+      isAssigned,
+      isOptionsExpanded: previousQuestion?.isOptionsExpanded ?? false,
+      isLoadingOptions: false,
+      options: previousQuestion?.options ?? [],
+      newOptionText: previousQuestion?.newOptionText ?? '',
+      newOptionIsCorrect: previousQuestion?.newOptionIsCorrect ?? false,
+      optionError: previousQuestion?.optionError ?? '',
+      isSubmittingOption: false,
+      isDeletingOption: null,
+    };
   }
 
   AddQuestion(text: string, type: 0 | 1) {
@@ -162,6 +204,31 @@ export class QuestionsComponent implements OnInit {
     this.editQuestionText = question.text;
   }
 
+  toggleOptions(question: QuestionItem) {
+    question.isOptionsExpanded = !question.isOptionsExpanded;
+
+    if (question.isOptionsExpanded) {
+      this.loadOptions(question);
+    }
+  }
+
+  loadOptions(question: QuestionItem) {
+    question.isLoadingOptions = true;
+
+    this.questionService.ShowOption(question.id).subscribe({
+      next: (res) => {
+        question.options = res;
+        question.optionError = '';
+        question.isLoadingOptions = false;
+      },
+      error: (err) => {
+        console.log(err);
+        question.isLoadingOptions = false;
+        question.optionError = 'Unable to load options right now.';
+      },
+    });
+  }
+
   closeEditModal() {
     this.editQuestionId = '';
     this.editQuestionText = '';
@@ -184,5 +251,70 @@ export class QuestionsComponent implements OnInit {
         console.log(err);
       },
     });
+  }
+  AddOptionToQuestion(question: QuestionItem) {
+    if (question.teacherOwnerId !== this.userId) {
+      return;
+    }
+
+    const trimedText = question.newOptionText.trim();
+    if (!trimedText || !question.id) {
+      return;
+    }
+
+    const data: AddOption = {
+      text: trimedText,
+      isCorrect: question.newOptionIsCorrect,
+      questionId: question.id,
+    };
+
+    question.optionError = '';
+    question.isSubmittingOption = true;
+
+    this.questionService.AddOptionToQuuestion(data).subscribe({
+      next: (res) => {
+        question.newOptionText = '';
+        question.newOptionIsCorrect = false;
+        question.isSubmittingOption = false;
+        this.loadOptions(question);
+      },
+      error: (err) => {
+        question.isSubmittingOption = false;
+        question.optionError = this.getOptionErrorMessage(err);
+      },
+    });
+  }
+
+  DeleteOption(question: QuestionItem, optionId: string) {
+    if (question.teacherOwnerId !== this.userId) {
+      return;
+    }
+
+    question.optionError = '';
+    question.isDeletingOption = optionId;
+
+    this.questionService.DeleteOption(optionId).subscribe({
+      next: (res) => {
+        question.isDeletingOption = null;
+        this.loadOptions(question);
+      },
+      error: (err) => {
+        question.isDeletingOption = null;
+        question.optionError = 'Unable to delete this option right now.';
+      },
+    });
+  }
+
+  private getOptionErrorMessage(error: HttpErrorResponse): string {
+    if (typeof error.error === 'string') {
+      try {
+        const parsedError = JSON.parse(error.error);
+        return parsedError?.error || error.error;
+      } catch {
+        return error.error;
+      }
+    }
+
+    return error.error?.error || error.message || 'Unable to save this option right now.';
   }
 }
