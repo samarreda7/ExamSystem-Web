@@ -209,31 +209,87 @@
                                 class="flex flex-col gap-3 rounded-2xl border border-slate-200/10 bg-slate-900/55 p-4 sm:flex-row sm:items-center sm:justify-between"
                               >
                                 <div>
-                                  <p class="text-sm font-medium text-white">{{ option.text }}</p>
-                                  <p
-                                    class="mt-1 text-xs font-semibold uppercase tracking-[0.18em]"
-                                    [ngClass]="
-                                      option.isCorrect ? 'text-emerald-300' : 'text-slate-400'
-                                    "
-                                  >
-                                    {{ option.isCorrect ? 'Correct option' : 'Wrong option' }}
-                                  </p>
+                                  @if (question.editingOptionId === option.id) {
+                                    <div class="grid gap-3">
+                                      <input
+                                        type="text"
+                                        [(ngModel)]="question.editingOptionText"
+                                        class="w-full rounded-2xl border border-slate-200/10 bg-slate-950/80 px-4 py-3 text-white outline-none transition placeholder:text-slate-500 focus:border-amber-300/50"
+                                        placeholder="Update option text"
+                                      />
+
+                                      <label class="flex items-center gap-3 rounded-2xl border border-slate-200/10 bg-slate-950/60 px-4 py-3 text-sm text-slate-200">
+                                        <input
+                                          type="checkbox"
+                                          [(ngModel)]="question.editingOptionIsCorrect"
+                                          class="h-4 w-4 rounded border-slate-500 bg-slate-900 text-amber-400 focus:ring-amber-300"
+                                        />
+                                        Mark this option as correct
+                                      </label>
+                                    </div>
+                                  } @else {
+                                    <p class="text-sm font-medium text-white">{{ option.text }}</p>
+                                    <p
+                                      class="mt-1 text-xs font-semibold uppercase tracking-[0.18em]"
+                                      [ngClass]="
+                                        option.isCorrect ? 'text-emerald-300' : 'text-slate-400'
+                                      "
+                                    >
+                                      {{ option.isCorrect ? 'Correct option' : 'Wrong option' }}
+                                    </p>
+                                  }
                                 </div>
 
                                 @if (question.teacherOwnerId === userId) {
-                                  <button
-                                    type="button"
-                                    (click)="DeleteOption(question, option.id)"
-                                    [disabled]="question.isDeletingOption === option.id"
-                                    class="inline-flex items-center justify-center gap-2 rounded-2xl border border-rose-300/20 bg-rose-400/10 px-3 py-2.5 text-sm font-medium text-rose-100 transition hover:border-rose-200/40 hover:bg-rose-400/20 disabled:cursor-not-allowed disabled:opacity-60"
-                                  >
-                                    <i class="fa-solid fa-trash-can text-sm"></i>
-                                    {{
-                                      question.isDeletingOption === option.id
-                                        ? 'Deleting...'
-                                        : 'Delete'
-                                    }}
-                                  </button>
+                                  <div class="flex flex-col gap-2 sm:min-w-44">
+                                    @if (question.editingOptionId === option.id) {
+                                      <button
+                                        type="button"
+                                        (click)="UpdateOption(question, option.id)"
+                                        [disabled]="question.isUpdatingOption === option.id || !question.editingOptionText.trim()"
+                                        class="inline-flex items-center justify-center gap-2 rounded-2xl border border-amber-300/20 bg-amber-400/10 px-3 py-2.5 text-sm font-medium text-amber-100 transition hover:border-amber-200/40 hover:bg-amber-400/20 disabled:cursor-not-allowed disabled:opacity-60"
+                                      >
+                                        <i class="fa-solid fa-floppy-disk text-sm"></i>
+                                        {{
+                                          question.isUpdatingOption === option.id
+                                            ? 'Saving...'
+                                            : 'Save'
+                                        }}
+                                      </button>
+
+                                      <button
+                                        type="button"
+                                        (click)="cancelOptionEdit(question)"
+                                        class="inline-flex items-center justify-center gap-2 rounded-2xl border border-slate-200/10 bg-slate-900/70 px-3 py-2.5 text-sm font-medium text-slate-200 transition hover:bg-slate-800"
+                                      >
+                                        <i class="fa-solid fa-ban text-sm"></i>
+                                        Cancel
+                                      </button>
+                                    } @else {
+                                      <button
+                                        type="button"
+                                        (click)="startOptionEdit(question, option)"
+                                        class="inline-flex items-center justify-center gap-2 rounded-2xl border border-amber-300/20 bg-amber-400/10 px-3 py-2.5 text-sm font-medium text-amber-100 transition hover:border-amber-200/40 hover:bg-amber-400/20"
+                                      >
+                                        <i class="fa-solid fa-pen-to-square text-sm"></i>
+                                        Edit
+                                      </button>
+
+                                      <button
+                                        type="button"
+                                        (click)="DeleteOption(question, option.id)"
+                                        [disabled]="question.isDeletingOption === option.id"
+                                        class="inline-flex items-center justify-center gap-2 rounded-2xl border border-rose-300/20 bg-rose-400/10 px-3 py-2.5 text-sm font-medium text-rose-100 transition hover:border-rose-200/40 hover:bg-rose-400/20 disabled:cursor-not-allowed disabled:opacity-60"
+                                      >
+                                        <i class="fa-solid fa-trash-can text-sm"></i>
+                                        {{
+                                          question.isDeletingOption === option.id
+                                            ? 'Deleting...'
+                                            : 'Delete'
+                                        }}
+                                      </button>
+                                    }
+                                  </div>
                                 }
                               </div>
                             }

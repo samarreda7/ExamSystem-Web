@@ -7,6 +7,7 @@ import { ShowQuestions } from '../../models/show-questions.interface';
 import { AddQuestion } from '../../models/add-question.interface';
 import { AddOption } from '../../models/add-option.interface';
 import { ShowOption } from '../../models/show-option.interface';
+import { UpdataOption } from '../../models/updata-option.interface';
 
 @Injectable({
   providedIn: 'root',
@@ -67,6 +68,11 @@ export class QuestionService {
   }
   DeleteOption(id: string): Observable<string> {
     return this.httpClient.delete(environment.baseUrl + `QuestionOption/${id}`, {
+      responseType: 'text',
+    });
+  }
+  updateOption(id: string, data: UpdataOption): Observable<string> {
+    return this.httpClient.put(environment.baseUrl + `QuestionOption/${id}`, data, {
       responseType: 'text',
     });
   }

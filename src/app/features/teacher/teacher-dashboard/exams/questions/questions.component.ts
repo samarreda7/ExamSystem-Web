@@ -10,6 +10,7 @@ import { ShowQuestions } from '../../../../../core/models/show-questions.interfa
 import { forkJoin, map, Observable, of, switchMap } from 'rxjs';
 import { AddOption } from '../../../../../core/models/add-option.interface';
 import { ShowOption } from '../../../../../core/models/show-option.interface';
+import { UpdataOption } from '../../../../../core/models/updata-option.interface';
 
 type QuestionItem = ShowQuestions & {
   isAssigned: boolean;
@@ -21,6 +22,10 @@ type QuestionItem = ShowQuestions & {
   optionError: string;
   isSubmittingOption: boolean;
   isDeletingOption: string | null;
+  editingOptionId: string | null;
+  editingOptionText: string;
+  editingOptionIsCorrect: boolean;
+  isUpdatingOption: string | null;
 };
 
 @Component({
@@ -113,6 +118,10 @@ export class QuestionsComponent implements OnInit {
       optionError: previousQuestion?.optionError ?? '',
       isSubmittingOption: false,
       isDeletingOption: null,
+      editingOptionId: null,
+      editingOptionText: '',
+      editingOptionIsCorrect: false,
+      isUpdatingOption: null,
     };
   }
 
@@ -305,6 +314,23 @@ export class QuestionsComponent implements OnInit {
     });
   }
 
+  startOptionEdit(question: QuestionItem, option: ShowOption) {
+    if (question.teacherOwnerId !== this.userId) {
+      return;
+    }
+
+    question.editingOptionId = option.id;
+    question.editingOptionText = option.text;
+    question.editingOptionIsCorrect = option.isCorrect;
+    question.optionError = '';
+  }
+
+  cancelOptionEdit(question: QuestionItem) {
+    question.editingOptionId = null;
+    question.editingOptionText = '';
+    question.editingOptionIsCorrect = false;
+  }
+
   private getOptionErrorMessage(error: HttpErrorResponse): string {
     if (typeof error.error === 'string') {
       try {
@@ -316,5 +342,38 @@ export class QuestionsComponent implements OnInit {
     }
 
     return error.error?.error || error.message || 'Unable to save this option right now.';
+  }
+
+  UpdateOption(question: QuestionItem, id: string) {
+    if (question.teacherOwnerId !== this.userId) {
+      return;
+    }
+
+    const trimedText = question.editingOptionText.trim();
+    if (!trimedText || !question.id) {
+      return;
+    }
+
+    const data: UpdataOption = {
+      text: trimedText,
+      isCorrect: question.editingOptionIsCorrect,
+    };
+
+    question.optionError = '';
+    question.isUpdatingOption = id;
+
+    this.questionService.updateOption(id, data).subscribe({
+      next: (res) => {
+        console.log(res);
+        question.isUpdatingOption = null;
+        this.cancelOptionEdit(question);
+        this.loadOptions(question);
+      },
+      error: (err) => {
+        console.log(err);
+        question.isUpdatingOption = null;
+        question.optionError = this.getOptionErrorMessage(err);
+      },
+    });
   }
 }
