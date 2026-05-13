@@ -26,6 +26,8 @@ type QuestionItem = ShowQuestions & {
   editingOptionText: string;
   editingOptionIsCorrect: boolean;
   isUpdatingOption: string | null;
+  assignError: string;
+  assignErrorTimeoutId: ReturnType<typeof setTimeout> | null;
 };
 
 @Component({
@@ -122,6 +124,8 @@ export class QuestionsComponent implements OnInit {
       editingOptionText: '',
       editingOptionIsCorrect: false,
       isUpdatingOption: null,
+      assignError: previousQuestion?.assignError ?? '',
+      assignErrorTimeoutId: previousQuestion?.assignErrorTimeoutId ?? null,
     };
   }
 
@@ -160,8 +164,8 @@ export class QuestionsComponent implements OnInit {
     return type === 0 ? 'Multiple choice' : 'True / False';
   }
 
-  AssignQuestion(questionId: string) {
-    const trimmedQuestionId = questionId.trim();
+  AssignQuestion(question: QuestionItem) {
+    const trimmedQuestionId = question.id.trim();
     if (!trimmedQuestionId || !this.selectedExamId) return;
 
     const data: AssignQuestion = {
@@ -169,13 +173,24 @@ export class QuestionsComponent implements OnInit {
       questionId: trimmedQuestionId,
     };
 
+    question.assignError = '';
+    if (question.assignErrorTimeoutId) {
+      clearTimeout(question.assignErrorTimeoutId);
+      question.assignErrorTimeoutId = null;
+    }
+
     this.questionService.AssignQuestionToExam(data).subscribe({
       next: (res) => {
         console.log(res);
         this.getAllQuestions();
       },
-      error: (err) => {
+      error: (err: HttpErrorResponse) => {
         console.log(err);
+        question.assignError = this.getAssignQuestionErrorMessage(err);
+        question.assignErrorTimeoutId = setTimeout(() => {
+          question.assignError = '';
+          question.assignErrorTimeoutId = null;
+        }, 3000);
       },
     });
   }
@@ -342,6 +357,29 @@ export class QuestionsComponent implements OnInit {
     }
 
     return error.error?.error || error.message || 'Unable to save this option right now.';
+  }
+
+  private getAssignQuestionErrorMessage(error: HttpErrorResponse): string {
+    if (error.status === 409) {
+      if (typeof error.error === 'string') {
+        try {
+          const parsedError = JSON.parse(error.error);
+          return (
+            parsedError?.error ||
+            'This question must have a correct option before it can be added to the exam.'
+          );
+        } catch {
+          return error.error;
+        }
+      }
+
+      return (
+        error.error?.error ||
+        'This question must have a correct option before it can be added to the exam.'
+      );
+    }
+
+    return error.error?.error || error.message || 'Unable to assign this question right now.';
   }
 
   UpdateOption(question: QuestionItem, id: string) {

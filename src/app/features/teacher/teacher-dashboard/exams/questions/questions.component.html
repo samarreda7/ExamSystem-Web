@@ -135,7 +135,7 @@
 
                     <button
                       type="button"
-                      (click)="question.isAssigned ? UnAssignQuestionFromExam(question.id) : AssignQuestion(question.id)"
+                      (click)="question.isAssigned ? UnAssignQuestionFromExam(question.id) : AssignQuestion(question)"
                       class="inline-flex items-center justify-center gap-2 rounded-2xl px-4 py-3 text-sm font-semibold text-white shadow-lg shadow-slate-950/20 transition duration-200 hover:-translate-y-0.5"
                       [ngClass]="
                         question.isAssigned
@@ -153,6 +153,12 @@
                       ></i>
                       {{ question.isAssigned ? 'Remove From Exam' : 'Add To Exam' }}
                     </button>
+
+                    @if (question.assignError) {
+                      <p class="rounded-2xl border border-rose-300/20 bg-rose-400/10 px-3 py-2 text-sm text-rose-100">
+                        {{ question.assignError }}
+                      </p>
+                    }
 
                     @if (question.teacherOwnerId === userId) {
                       <div class="grid grid-cols-2 gap-2">
