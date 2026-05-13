@@ -46,8 +46,8 @@ export class GroupService {
       environment.baseUrl + `StudentGroup/group/${groupId}/students/count`,
     );
   }
-  AssignExamt(data: AssignExam): Observable<string> {
-    return this.httpClient.post(environment.baseUrl + `StudentGroup/assign`, data, {
+  AssignExam(data: AssignExam): Observable<string> {
+    return this.httpClient.post(environment.baseUrl + `ExamGroup/assign`, data, {
       responseType: 'text',
     });
   }
