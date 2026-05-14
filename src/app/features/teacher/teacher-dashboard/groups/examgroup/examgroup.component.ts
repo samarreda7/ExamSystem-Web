@@ -32,9 +32,7 @@ export class ExamgroupComponent implements OnChanges {
         this.assignedExams = {};
         this.examList.forEach((exam) => this.IsAssigned(exam.id));
       },
-      error: (err) => {
-        console.log(err);
-      },
+      error: () => {},
     });
   }
   AssignExam(examId: string) {
@@ -43,26 +41,20 @@ export class ExamgroupComponent implements OnChanges {
       groupId: this.groupId,
     };
     this.groupService.AssignExam(data).subscribe({
-      next: (res) => {
-        console.log(res);
+      next: () => {
         this.assignedExams[examId] = true;
         this.updateExamGroupsCount(examId, 1);
       },
-      error: (err) => {
-        console.log(err);
-      },
+      error: () => {},
     });
   }
   UnAssignExam(examId: string) {
     this.groupService.UnAssignExam(examId, this.groupId).subscribe({
-      next: (res) => {
-        console.log(res);
+      next: () => {
         this.assignedExams[examId] = false;
         this.updateExamGroupsCount(examId, -1);
       },
-      error: (err) => {
-        console.log(err);
-      },
+      error: () => {},
     });
   }
   IsAssigned(examId: string) {
@@ -71,9 +63,7 @@ export class ExamgroupComponent implements OnChanges {
         this.isAssigned = res;
         this.assignedExams[examId] = res;
       },
-      error: (err) => {
-        console.log(err);
-      },
+      error: () => {},
     });
   }
   isExamAssigned(examId: string): boolean {

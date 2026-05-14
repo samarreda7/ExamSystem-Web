@@ -34,9 +34,7 @@ export class HomeComponent implements OnInit {
       next: (res) => {
         this.examcount = res;
       },
-      error: (err) => {
-        console.log(err);
-      },
+      error: () => {},
     });
   }
 
@@ -45,9 +43,7 @@ export class HomeComponent implements OnInit {
       next: (res) => {
         this.groupcount = res;
       },
-      error: (err) => {
-        console.log(err);
-      },
+      error: () => {},
     });
   }
 
@@ -60,9 +56,7 @@ export class HomeComponent implements OnInit {
       next: (res) => {
         this.teacherInfo = res;
       },
-      error: (err) => {
-        console.log(err);
-      },
+      error: () => {},
     });
   }
 }

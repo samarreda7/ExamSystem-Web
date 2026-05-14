@@ -7,7 +7,7 @@ import { QuestionService } from '../../../../../core/auth/services/question.serv
 import { AddQuestion } from '../../../../../core/models/add-question.interface';
 import { ActivatedRoute } from '@angular/router';
 import { ShowQuestions } from '../../../../../core/models/show-questions.interface';
-import { forkJoin, map, Observable, of, switchMap } from 'rxjs';
+import { forkJoin, map, of, switchMap } from 'rxjs';
 import { AddOption } from '../../../../../core/models/add-option.interface';
 import { ShowOption } from '../../../../../core/models/show-option.interface';
 import { UpdataOption } from '../../../../../core/models/updata-option.interface';
@@ -96,11 +96,8 @@ export class QuestionsComponent implements OnInit {
       .subscribe({
         next: (res: QuestionItem[]) => {
           this.questions = res;
-          console.log(this.questions);
         },
-        error: (err) => {
-          console.log(err);
-        },
+        error: () => {},
       });
   }
 
@@ -133,12 +130,10 @@ export class QuestionsComponent implements OnInit {
     const trimmedText = text.trim();
 
     if (!trimmedText) {
-      console.log('Question text is required.');
       return;
     }
 
     if (type !== 0 && type !== 1) {
-      console.log('Question type must be 0 or 1.');
       return;
     }
 
@@ -146,15 +141,13 @@ export class QuestionsComponent implements OnInit {
 
     this.isCreatingQuestion = true;
     this.questionService.AddQuestion(data).subscribe({
-      next: (res) => {
-        console.log(res);
+      next: () => {
         this.questionText = '';
         this.questionType = 0;
         this.isCreatingQuestion = false;
         this.getAllQuestions();
       },
-      error: (err) => {
-        console.log(err);
+      error: () => {
         this.isCreatingQuestion = false;
       },
     });
@@ -180,12 +173,10 @@ export class QuestionsComponent implements OnInit {
     }
 
     this.questionService.AssignQuestionToExam(data).subscribe({
-      next: (res) => {
-        console.log(res);
+      next: () => {
         this.getAllQuestions();
       },
       error: (err: HttpErrorResponse) => {
-        console.log(err);
         question.assignError = this.getAssignQuestionErrorMessage(err);
         question.assignErrorTimeoutId = setTimeout(() => {
           question.assignError = '';
@@ -202,24 +193,18 @@ export class QuestionsComponent implements OnInit {
     this.questionService
       .UnAssignQuestionFromExam(this.selectedExamId, trimmedQuestionId)
       .subscribe({
-        next: (res) => {
-          console.log(res);
+        next: () => {
           this.getAllQuestions();
         },
-        error: (err) => {
-          console.log(err);
-        },
+        error: () => {},
       });
   }
   DeleteQuestion(id: string) {
     this.questionService.DeleteQuestion(id).subscribe({
-      next: (res) => {
-        console.log(res);
+      next: () => {
         this.getAllQuestions();
       },
-      error: (err) => {
-        console.log(err);
-      },
+      error: () => {},
     });
   }
 
@@ -245,8 +230,7 @@ export class QuestionsComponent implements OnInit {
         question.optionError = '';
         question.isLoadingOptions = false;
       },
-      error: (err) => {
-        console.log(err);
+      error: () => {
         question.isLoadingOptions = false;
         question.optionError = 'Unable to load options right now.';
       },
@@ -266,9 +250,7 @@ export class QuestionsComponent implements OnInit {
         next: (isAssigned) => {
           question.isAssigned = isAssigned;
         },
-        error: (err) => {
-          console.log(err);
-        },
+        error: () => {},
       });
   }
 
@@ -285,14 +267,11 @@ export class QuestionsComponent implements OnInit {
     }
 
     this.questionService.UpdateQuestion(this.editQuestionId, trimmedText).subscribe({
-      next: (res) => {
-        console.log(res);
+      next: () => {
         this.closeEditModal();
         this.getAllQuestions();
       },
-      error: (err) => {
-        console.log(err);
-      },
+      error: () => {},
     });
   }
   AddOptionToQuestion(question: QuestionItem) {
@@ -421,15 +400,13 @@ export class QuestionsComponent implements OnInit {
     question.isUpdatingOption = id;
 
     this.questionService.updateOption(id, data).subscribe({
-      next: (res) => {
-        console.log(res);
+      next: () => {
         question.isUpdatingOption = null;
         this.cancelOptionEdit(question);
         this.loadOptions(question);
         this.refreshQuestionAssignmentStatus(question);
       },
       error: (err) => {
-        console.log(err);
         question.isUpdatingOption = null;
         question.optionError = this.getOptionErrorMessage(err);
       },

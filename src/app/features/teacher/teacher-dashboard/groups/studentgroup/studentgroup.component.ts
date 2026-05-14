@@ -32,9 +32,7 @@ export class StudentgroupComponent implements OnChanges {
         this.assignedStudents = {};
         this.StudentList.forEach((student) => this.IsAssigned(student.id));
       },
-      error: (err) => {
-        console.log(err);
-      },
+      error: () => {},
     });
   }
   AssignStudent(studentId: string) {
@@ -43,24 +41,18 @@ export class StudentgroupComponent implements OnChanges {
       groupId: this.groupId,
     };
     this.groupService.AssignStudent(data).subscribe({
-      next: (res) => {
-        console.log(res);
+      next: () => {
         this.assignedStudents[studentId] = true;
       },
-      error: (err) => {
-        console.log(err);
-      },
+      error: () => {},
     });
   }
   UnAssignStudent(studentId: string) {
     this.groupService.UnAssignStudent(studentId, this.groupId).subscribe({
-      next: (res) => {
-        console.log(res);
+      next: () => {
         this.assignedStudents[studentId] = false;
       },
-      error: (err) => {
-        console.log(err);
-      },
+      error: () => {},
     });
   }
   IsAssigned(studentId: string) {
@@ -69,9 +61,7 @@ export class StudentgroupComponent implements OnChanges {
         this.isAssigned = res;
         this.assignedStudents[studentId] = res;
       },
-      error: (err) => {
-        console.log(err);
-      },
+      error: () => {},
     });
   }
 

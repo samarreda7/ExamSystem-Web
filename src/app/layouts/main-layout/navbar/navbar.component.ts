@@ -55,9 +55,7 @@ export class NavbarComponent implements OnInit {
       next: (res) => {
         this.studentInfo = res;
       },
-      error: (err) => {
-        console.log(err);
-      },
+      error: () => {},
     });
   }
 
@@ -66,9 +64,7 @@ export class NavbarComponent implements OnInit {
       next: (res) => {
         this.teacherInfo = res;
       },
-      error: (err) => {
-        console.log(err);
-      },
+      error: () => {},
     });
   }
 

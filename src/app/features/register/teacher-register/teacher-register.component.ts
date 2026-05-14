@@ -65,7 +65,7 @@ export class TeacherRegisterComponent implements OnInit {
       next: (res: Subject[]) => {
         this.subjectlist = res;
       },
-      error: (err) => console.log(err),
+      error: () => {},
     });
   }
 
@@ -75,13 +75,10 @@ export class TeacherRegisterComponent implements OnInit {
       const teacherData = this.registerform.value as Teacher & { rePassword?: string };
       delete teacherData.rePassword;
       this.registerSubscribe = this.authService.signUpTeacher(teacherData).subscribe({
-        next: (res) => {
-          console.log(res);
+        next: () => {
           this.router.navigate(["/login"]);
         },
-        error: (err) => {
-          console.log(err);
-        },
+        error: () => {},
       });
     }
   }

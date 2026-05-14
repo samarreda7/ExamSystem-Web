@@ -30,38 +30,29 @@ export class GroupsComponent implements OnInit {
   getAllGroups() {
     this.groupService.GetAllGroups().subscribe({
       next: (res) => {
-        console.log(res);
         this.groupList = res;
         this.groupList.forEach((group) => {
           this.StudentCount(group.id);
           this.ExamCount(group.id);
         });
       },
-      error: (err) => {
-        console.log(err);
-      },
+      error: () => {},
     });
   }
   StudentCount(groupId: string) {
     this.groupService.StudentCountOnGroup(groupId).subscribe({
       next: (res) => {
-        console.log(res);
         this.studentCounts[groupId] = res;
       },
-      error: (err) => {
-        console.log(err);
-      },
+      error: () => {},
     });
   }
   ExamCount(groupId: string) {
     this.groupService.ExamCountOnGroup(groupId).subscribe({
       next: (res) => {
-        console.log(res);
         this.examCounts[groupId] = res;
       },
-      error: (err) => {
-        console.log(err);
-      },
+      error: () => {},
     });
   }
   AddGroup(name: string) {
@@ -70,14 +61,11 @@ export class GroupsComponent implements OnInit {
       return;
     }
     this.groupService.AddGroup(trimedName).subscribe({
-      next: (res) => {
-        console.log(res);
+      next: () => {
         this.groupName = '';
         this.getAllGroups();
       },
-      error: (err) => {
-        console.log(err);
-      },
+      error: () => {},
     });
   }
 

@@ -46,15 +46,13 @@ export class ExamsComponent implements OnInit {
 
     this.isSubmitting = true;
     this.examService.AddExam(trimmedName).subscribe({
-      next: (res) => {
-        console.log(res);
+      next: () => {
         this.examName = '';
         this.setFeedback('Exam created successfully.', 'success');
         this.isSubmitting = false;
         this.getAllTeacherExam();
       },
-      error: (err) => {
-        console.log(err);
+      error: () => {
         this.isSubmitting = false;
         this.setFeedback('Unable to create the exam right now.', 'error');
       },
@@ -65,11 +63,9 @@ export class ExamsComponent implements OnInit {
     this.examService.getAllTeacherExam().subscribe({
       next: (res) => {
         this.Exams = res;
-        console.log(this.Exams);
         this.isLoading = false;
       },
-      error: (err) => {
-        console.log(err);
+      error: () => {
         this.isLoading = false;
         this.setFeedback('Unable to load your exams right now.', 'error');
       },
@@ -98,14 +94,12 @@ export class ExamsComponent implements OnInit {
   DeleteExam(id: string) {
     this.deletingExamId = id;
     this.examService.DeleteExam(id).subscribe({
-      next: (res) => {
-        console.log(res);
+      next: () => {
         this.deletingExamId = '';
         this.setFeedback('Exam deleted successfully.', 'success');
         this.getAllTeacherExam();
       },
-      error: (err) => {
-        console.log(err);
+      error: () => {
         this.deletingExamId = '';
         this.setFeedback('Unable to delete the exam right now.', 'error');
       },
@@ -139,14 +133,12 @@ export class ExamsComponent implements OnInit {
 
     this.isUpdating = true;
     this.examService.UpdateExamName(this.editExamId, trimmedName).subscribe({
-      next: (res) => {
-        console.log(res);
+      next: () => {
         this.setFeedback('Exam updated successfully.', 'success');
         this.closeEditModal();
         this.getAllTeacherExam();
       },
-      error: (err) => {
-        console.log(err);
+      error: () => {
         this.isUpdating = false;
         this.setFeedback('Unable to update the exam right now.', 'error');
       },

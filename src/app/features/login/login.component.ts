@@ -27,7 +27,6 @@ export class LoginComponent {
       const loginData = this.loginForm.value;
       this.loginSubscribe = this.authService.signIn(loginData).subscribe({
         next: (res) => {
-          console.log(res);
           localStorage.setItem('Examtoken', res.token);
           localStorage.setItem('Examrole', res.role);
           localStorage.setItem('ExamuserId', res.userId);
@@ -37,9 +36,7 @@ export class LoginComponent {
             this.router.navigate(['/teacher/home']);
           }
         },
-        error: (err) => {
-          console.log(err);
-        },
+        error: () => {},
       });
     }
   }

@@ -55,12 +55,8 @@ export class StudentRegisterComponent {
       const userData = this.registerform.value;
       delete userData.rePassword;
       this.registerSubscribe = this.authService.signUp(userData).subscribe({
-        next: (res) => {
-          console.log(res);
-        },
-        error: (err) => {
-          console.log(err);
-        },
+        next: () => {},
+        error: () => {},
       });
     }
   }
