@@ -253,6 +253,25 @@ export class QuestionsComponent implements OnInit {
     });
   }
 
+  private refreshQuestionAssignmentStatus(question: QuestionItem) {
+    const trimmedQuestionId = question.id.trim();
+    if (!trimmedQuestionId || !this.selectedExamId) {
+      question.isAssigned = false;
+      return;
+    }
+
+    this.questionService
+      .QuestionIsAssignedToCurrentExam(trimmedQuestionId, this.selectedExamId)
+      .subscribe({
+        next: (isAssigned) => {
+          question.isAssigned = isAssigned;
+        },
+        error: (err) => {
+          console.log(err);
+        },
+      });
+  }
+
   closeEditModal() {
     this.editQuestionId = '';
     this.editQuestionText = '';
@@ -321,6 +340,7 @@ export class QuestionsComponent implements OnInit {
       next: (res) => {
         question.isDeletingOption = null;
         this.loadOptions(question);
+        this.refreshQuestionAssignmentStatus(question);
       },
       error: (err) => {
         question.isDeletingOption = null;
@@ -406,6 +426,7 @@ export class QuestionsComponent implements OnInit {
         question.isUpdatingOption = null;
         this.cancelOptionEdit(question);
         this.loadOptions(question);
+        this.refreshQuestionAssignmentStatus(question);
       },
       error: (err) => {
         console.log(err);
