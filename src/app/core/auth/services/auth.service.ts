@@ -12,21 +12,26 @@ export class AuthService {
 
   //Student signup
   signUp(data: object): Observable<any> {
-    return this.httpClient.post(environment.baseUrl + 'Student/add', data,
-      {responseType: 'text'});
+    return this.httpClient.post(environment.baseUrl + 'Student/add', data, {
+      responseType: 'text',
+    });
   }
-  signUpTeacher(data: object): Observable<any>{
-     return this.httpClient.post(environment.baseUrl + 'Teacher/add', data,
-      {responseType: 'text'});
+  signUpTeacher(data: object): Observable<any> {
+    return this.httpClient.post(environment.baseUrl + 'Teacher/add', data, {
+      responseType: 'text',
+    });
   }
-  signIn(data : object): Observable<any> {
-        return this.httpClient.post(environment.baseUrl + 'Auth/login', data);
+  signIn(data: object): Observable<any> {
+    return this.httpClient.post(environment.baseUrl + 'Auth/login', data);
   }
   getRole(): string | null {
-  return localStorage.getItem('Examrole');
-}
+    return localStorage.getItem('Examrole');
+  }
 
-isLoggedIn(): boolean {
-  return !!localStorage.getItem('Examtoken');
-}
+  isLoggedIn(): boolean {
+    return !!localStorage.getItem('Examtoken');
+  }
+  DeleteMyAccount(): Observable<any> {
+    return this.httpClient.delete(environment.baseUrl + `Auth/me`, { responseType: 'text' });
+  }
 }

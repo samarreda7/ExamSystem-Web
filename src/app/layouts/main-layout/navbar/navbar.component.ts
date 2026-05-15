@@ -1,9 +1,11 @@
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, HostListener, inject, OnInit } from '@angular/core';
 import { StudentService } from '../../../core/auth/services/student.service';
 import { TeacherService } from '../../../core/auth/services/teacher.service';
 import { Studentinfo } from '../../../core/models/studentinfo.interface';
 import { Teacherinfo } from '../../../core/models/teacherinfo.interface';
 import { Router, RouterLink, RouterLinkActive } from '@angular/router';
+import { AuthService } from '../../../core/auth/services/auth.service';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-navbar',
@@ -13,11 +15,13 @@ import { Router, RouterLink, RouterLinkActive } from '@angular/router';
 export class NavbarComponent implements OnInit {
   private readonly studentService = inject(StudentService);
   private readonly teacherService = inject(TeacherService);
+  private readonly authService = inject(AuthService);
   private readonly router = inject(Router);
   userId: string = localStorage.getItem('ExamuserId') ?? '';
   userRole: string = localStorage.getItem('Examrole') ?? '';
   studentInfo: Studentinfo | null = null;
   teacherInfo: Teacherinfo | null = null;
+  isMenuOpen = false;
 
   ngOnInit(): void {
     if (this.userRole === 'Teacher') {
@@ -68,10 +72,75 @@ export class NavbarComponent implements OnInit {
     });
   }
 
+  @HostListener('document:click')
+  closeMenu(): void {
+    this.isMenuOpen = false;
+  }
+
+  toggleMenu(event: MouseEvent): void {
+    event.stopPropagation();
+    this.isMenuOpen = !this.isMenuOpen;
+  }
+
+  keepMenuOpen(event: MouseEvent): void {
+    event.stopPropagation();
+  }
+
   logout() {
+    this.isMenuOpen = false;
     localStorage.removeItem('Examtoken');
     localStorage.removeItem('Examrole');
     localStorage.removeItem('ExamuserId');
     this.router.navigate(['/login']);
+  }
+
+  confirmDeleteAccount(): void {
+    this.isMenuOpen = false;
+
+    void Swal.fire({
+      title: 'Are you sure?',
+      text: 'This will permanently delete your account.',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonText: 'Yes',
+      cancelButtonText: 'No',
+      reverseButtons: true,
+      confirmButtonColor: '#dc2626',
+      cancelButtonColor: '#475569',
+      background: '#1e293b',
+      color: '#f8fafc',
+    }).then((result) => {
+      if (result.isConfirmed) {
+        this.DeleteMyOwnAccount();
+      }
+    });
+  }
+
+  DeleteMyOwnAccount() {
+    this.authService.DeleteMyAccount().subscribe({
+      next: () => {
+        void Swal.fire({
+          title: 'Account deleted',
+          text: 'Your account has been removed successfully.',
+          icon: 'success',
+          confirmButtonText: 'OK',
+          confirmButtonColor: '#2563eb',
+          background: '#1e293b',
+          color: '#f8fafc',
+        });
+        this.logout();
+      },
+      error: () => {
+        void Swal.fire({
+          title: 'Something went wrong',
+          text: 'We could not delete your account. Please try again.',
+          icon: 'error',
+          confirmButtonText: 'OK',
+          confirmButtonColor: '#2563eb',
+          background: '#1e293b',
+          color: '#f8fafc',
+        });
+      },
+    });
   }
 }
