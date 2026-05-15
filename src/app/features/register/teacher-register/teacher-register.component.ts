@@ -12,6 +12,7 @@ import { SubjectService } from '../../../core/auth/services/subject.service';
 import { Subject } from '../../../core/models/subject.interface';
 import { Teacher } from '../../../core/models/teacher.interface';
 import { Router } from '@angular/router';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-teacher-register',
@@ -76,7 +77,19 @@ export class TeacherRegisterComponent implements OnInit {
       delete teacherData.rePassword;
       this.registerSubscribe = this.authService.signUpTeacher(teacherData).subscribe({
         next: () => {
-          this.router.navigate(["/login"]);
+          Swal.fire({
+            position: 'center',
+            icon: 'success',
+            title: 'Account created successfully',
+            showConfirmButton: false,
+            showCloseButton: true,
+            timer: 2500,
+            background: '#1a2236',
+            color: '#e2f5ef',
+            iconColor: '#1d9e75',
+            customClass: { popup: 'dark-popup' },
+          });
+          this.router.navigate(['/login']);
         },
         error: () => {},
       });

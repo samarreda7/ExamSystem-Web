@@ -8,6 +8,8 @@ import {
 } from '@angular/forms';
 import { AuthService } from '../../../core/auth/services/auth.service';
 import { Subscription } from 'rxjs';
+import { Router } from '@angular/router';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-student-register',
@@ -17,6 +19,7 @@ import { Subscription } from 'rxjs';
 })
 export class StudentRegisterComponent {
   private readonly authService = inject(AuthService);
+  private readonly router = inject(Router);
 
   registerform: FormGroup = new FormGroup(
     {
@@ -55,7 +58,21 @@ export class StudentRegisterComponent {
       const userData = this.registerform.value;
       delete userData.rePassword;
       this.registerSubscribe = this.authService.signUp(userData).subscribe({
-        next: () => {},
+        next: () => {
+          Swal.fire({
+            position: 'center',
+            icon: 'success',
+            title: 'Account created successfully',
+            showConfirmButton: false,
+            showCloseButton: true,
+            timer: 2500,
+            background: '#1a2236',
+            color: '#e2f5ef',
+            iconColor: '#1d9e75',
+            customClass: { popup: 'dark-popup' },
+          });
+          this.router.navigate(['/login']);
+        },
         error: () => {},
       });
     }
