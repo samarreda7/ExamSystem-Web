@@ -7,10 +7,7 @@ import {
   CurrentUserProfile,
 } from '../../core/auth/services/auth.service';
 import { UpdateUser } from '../../core/models/update-user.interface';
-import { StudentService } from '../../core/auth/services/student.service';
-import { TeacherService } from '../../core/auth/services/teacher.service';
-import { Studentinfo } from '../../core/models/studentinfo.interface';
-import { Teacherinfo } from '../../core/models/teacherinfo.interface';
+import { UserInfo } from '../../core/models/user-info.interface';
 
 @Component({
   selector: 'app-update-user',
@@ -20,14 +17,10 @@ import { Teacherinfo } from '../../core/models/teacherinfo.interface';
 })
 export class UpdateUserComponent implements OnInit {
   private readonly authService = inject(AuthService);
-  private readonly studentService = inject(StudentService);
-  private readonly teacherService = inject(TeacherService);
 
   updateUserSubscribe: Subscription = new Subscription();
   profileSubscribe: Subscription = new Subscription();
   isSubmitting = false;
-  userId: string = localStorage.getItem('ExamuserId') ?? '';
-  userRole: string = localStorage.getItem('Examrole') ?? '';
 
   updateUserForm: FormGroup = new FormGroup({
     firstName: new FormControl('', [Validators.required, Validators.minLength(3)]),
@@ -63,26 +56,13 @@ export class UpdateUserComponent implements OnInit {
   loadCurrentUserProfile(): void {
     this.profileSubscribe.unsubscribe();
 
-    if (this.userRole === 'Teacher') {
-      this.profileSubscribe = this.teacherService.getTeacherInfo(this.userId).subscribe({
-        next: (res: Teacherinfo) => {
-          this.authService.setCurrentUser(res);
-          this.patchUserForm(res);
-        },
-        error: () => {},
-      });
-      return;
-    }
-
-    if (this.userRole === 'Student') {
-      this.profileSubscribe = this.studentService.getStudentInfo(this.userId).subscribe({
-        next: (res: Studentinfo) => {
-          this.authService.setCurrentUser(res);
-          this.patchUserForm(res);
-        },
-        error: () => {},
-      });
-    }
+    this.profileSubscribe = this.authService.getMeInfo().subscribe({
+      next: (res: UserInfo) => {
+        this.authService.setCurrentUser(res);
+        this.patchUserForm(res);
+      },
+      error: () => {},
+    });
   }
 
   onSubmit() {
@@ -121,6 +101,7 @@ export class UpdateUserComponent implements OnInit {
         });
       },
       error: () => {
+        this.isSubmitting = false;
       },
     });
   }

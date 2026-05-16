@@ -3,10 +3,9 @@ import { inject, Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { environment } from '../../../../environments/environment.development';
 import { UpdateUser } from '../../models/update-user.interface';
-import { Studentinfo } from '../../models/studentinfo.interface';
-import { Teacherinfo } from '../../models/teacherinfo.interface';
+import { UserInfo } from '../../models/user-info.interface';
 
-export type CurrentUserProfile = Studentinfo | Teacherinfo;
+export type CurrentUserProfile = UserInfo;
 
 @Injectable({
   providedIn: 'root',
@@ -56,5 +55,8 @@ export class AuthService {
     return this.httpClient.put(environment.baseUrl + `Auth/me`, data, {
       responseType: 'text',
     });
+  }
+  getMeInfo(): Observable<UserInfo> {
+    return this.httpClient.get<UserInfo>(environment.baseUrl + `Auth/me`);
   }
 }

@@ -1,11 +1,8 @@
 import { Component, HostListener, inject, OnInit } from '@angular/core';
-import { StudentService } from '../../../core/auth/services/student.service';
-import { TeacherService } from '../../../core/auth/services/teacher.service';
-import { Studentinfo } from '../../../core/models/studentinfo.interface';
-import { Teacherinfo } from '../../../core/models/teacherinfo.interface';
 import { Router, RouterLink, RouterLinkActive } from '@angular/router';
 import { AuthService } from '../../../core/auth/services/auth.service';
 import Swal from 'sweetalert2';
+import { UserInfo } from '../../../core/models/user-info.interface';
 
 @Component({
   selector: 'app-navbar',
@@ -13,26 +10,19 @@ import Swal from 'sweetalert2';
   templateUrl: './navbar.component.html',
 })
 export class NavbarComponent implements OnInit {
-  private readonly studentService = inject(StudentService);
-  private readonly teacherService = inject(TeacherService);
   private readonly authService = inject(AuthService);
   private readonly router = inject(Router);
-  userId: string = localStorage.getItem('ExamuserId') ?? '';
   userRole: string = localStorage.getItem('Examrole') ?? '';
-  studentInfo: Studentinfo | null = null;
-  teacherInfo: Teacherinfo | null = null;
+  userInfo: UserInfo | null = null;
+
   isMenuOpen = false;
 
   ngOnInit(): void {
-    if (this.userRole === 'Teacher') {
-      this.getTeacherInfo();
-    } else if (this.userRole === 'Student') {
-      this.getStudentInfo();
-    }
+    this.getUserInfo();
   }
 
   get fullName(): string {
-    const profile = this.teacherInfo ?? this.studentInfo;
+    const profile = this.userInfo;
     if (!profile) {
       return 'Welcome back';
     }
@@ -41,33 +31,21 @@ export class NavbarComponent implements OnInit {
   }
 
   get avatarPath(): string {
-    return this.userRole === 'Teacher'
-      ? '/Images/TeacherProfile.jpg'
-      : '/Images/StudentProfile.jpg';
+    return this.userRole === 'Teacher' ? '/Images/TeacherProfile.jpg' : '/Images/StudentProfile.jpg';
   }
 
   get roleLabel(): string {
-    return this.userRole || 'User';
+    return this.userInfo?.role || this.userRole || 'User';
   }
 
   get baseRoute(): string {
     return this.userRole === 'Teacher' ? '/teacher' : '/student';
   }
 
-  getStudentInfo() {
-    this.studentService.getStudentInfo(this.userId).subscribe({
-      next: (res: Studentinfo) => {
-        this.studentInfo = res;
-        this.authService.setCurrentUser(res);
-      },
-      error: () => {},
-    });
-  }
-
-  getTeacherInfo() {
-    this.teacherService.getTeacherInfo(this.userId).subscribe({
-      next: (res: Teacherinfo) => {
-        this.teacherInfo = res;
+  getUserInfo() {
+    this.authService.getMeInfo().subscribe({
+      next: (res: UserInfo) => {
+        this.userInfo = res;
         this.authService.setCurrentUser(res);
       },
       error: () => {},
