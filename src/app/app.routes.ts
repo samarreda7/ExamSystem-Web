@@ -16,6 +16,7 @@ import { HomeComponent as TeacherHomeComponent } from './features/teacher/teache
 import { ExamsComponent as TeacherExamsComponent } from './features/teacher/teacher-dashboard/exams/exams.component';
 import { GroupsComponent as TeacherGroupsComponent } from './features/teacher/teacher-dashboard/groups/groups.component';
 import { QuestionsComponent } from './features/teacher/teacher-dashboard/exams/questions/questions.component';
+import { UpdateUserComponent } from './features/update-user/update-user.component';
 
 export const routes: Routes = [
  { path: '', redirectTo: 'login', pathMatch: 'full' },
@@ -41,6 +42,7 @@ export const routes: Routes = [
     component: MainLayoutComponent,
     canActivate: [authGuard],
     children: [
+      { path: 'update-user', component: UpdateUserComponent },
 
       // Student section
       {

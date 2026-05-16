@@ -56,8 +56,9 @@ export class NavbarComponent implements OnInit {
 
   getStudentInfo() {
     this.studentService.getStudentInfo(this.userId).subscribe({
-      next: (res) => {
+      next: (res: Studentinfo) => {
         this.studentInfo = res;
+        this.authService.setCurrentUser(res);
       },
       error: () => {},
     });
@@ -65,8 +66,9 @@ export class NavbarComponent implements OnInit {
 
   getTeacherInfo() {
     this.teacherService.getTeacherInfo(this.userId).subscribe({
-      next: (res) => {
+      next: (res: Teacherinfo) => {
         this.teacherInfo = res;
+        this.authService.setCurrentUser(res);
       },
       error: () => {},
     });
@@ -86,8 +88,14 @@ export class NavbarComponent implements OnInit {
     event.stopPropagation();
   }
 
+  openUpdateProfile(): void {
+    this.isMenuOpen = false;
+    void this.router.navigate(['/update-user']);
+  }
+
   logout() {
     this.isMenuOpen = false;
+    this.authService.clearCurrentUser();
     localStorage.removeItem('Examtoken');
     localStorage.removeItem('Examrole');
     localStorage.removeItem('ExamuserId');
