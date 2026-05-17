@@ -5,6 +5,7 @@ import { environment } from '../../../../environments/environment.development';
 import { ShowGroup } from '../../models/show-group.interface';
 import { AssignStudentToGroup } from '../../models/assign-student-to-group.interface';
 import { AssignExam } from '../../models/assign-exam.interface';
+import { StudentGroup } from '../../models/student-group.interface';
 
 @Injectable({
   providedIn: 'root',
@@ -67,5 +68,8 @@ export class GroupService {
   //for student
   GetStudentGroupCount(): Observable<number> {
     return this.httpClient.get<number>(environment.baseUrl + `StudentGroup/my-groups/count`);
+  }
+  GetStudentGroup(): Observable<StudentGroup[]> {
+    return this.httpClient.get<StudentGroup[]>(environment.baseUrl + `StudentGroup/my-groups`);
   }
 }

@@ -3,6 +3,7 @@ import { inject, Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { environment } from '../../../../environments/environment.development';
 import { Exams } from '../../models/exams.interface';
+import { StudentExam } from '../../models/student-exam.interface';
 
 @Injectable({
   providedIn: 'root',
@@ -40,5 +41,8 @@ export class ExamService {
   //for student
   GetStudentExamCount(): Observable<number> {
     return this.httpClient.get<number>(environment.baseUrl + `ExamGroup/students/exams/count`);
+  }
+  GetStudentExam(): Observable<StudentExam[]> {
+    return this.httpClient.get<StudentExam[]>(environment.baseUrl + `ExamGroup/students/exams`);
   }
 }
