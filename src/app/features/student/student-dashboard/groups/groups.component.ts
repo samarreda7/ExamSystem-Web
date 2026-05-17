@@ -1,6 +1,8 @@
 import { Component, inject, OnInit } from '@angular/core';
 import { GroupService } from '../../../../core/auth/services/group.service';
 import { StudentGroup } from '../../../../core/models/student-group.interface';
+import { ExamService } from '../../../../core/auth/services/exam.service';
+import { StudentExam } from '../../../../core/models/student-exam.interface';
 
 @Component({
   selector: 'app-student-groups',
@@ -10,8 +12,12 @@ import { StudentGroup } from '../../../../core/models/student-group.interface';
 })
 export class GroupsComponent implements OnInit {
   private readonly groupService = inject(GroupService);
+  private readonly examService = inject(ExamService);
   GroupList: StudentGroup[] = [];
   isLoading = false;
+  expandedGroupId: string | null = null;
+  groupExams: Record<string, StudentExam[]> = {};
+  loadingExamGroupId: string | null = null;
 
   ngOnInit(): void {
     this.GetStudentGroups();
@@ -36,5 +42,46 @@ export class GroupsComponent implements OnInit {
 
   trackByGroupId(index: number, group: StudentGroup): string {
     return group.id;
+  }
+
+  toggleGroupExams(groupId: string): void {
+    if (this.expandedGroupId === groupId) {
+      this.expandedGroupId = null;
+      return;
+    }
+
+    this.expandedGroupId = groupId;
+
+    if (this.groupExams[groupId]) {
+      return;
+    }
+
+    this.GetGroupExam(groupId);
+  }
+
+  GetGroupExam(id: string) {
+    this.loadingExamGroupId = id;
+    this.examService.GetExamsByGroupId(id).subscribe({
+      next: (res) => {
+        this.groupExams[id] = res;
+        this.loadingExamGroupId = null;
+      },
+      error: () => {
+        this.groupExams[id] = [];
+        this.loadingExamGroupId = null;
+      },
+    });
+  }
+
+  getGroupExams(groupId: string): StudentExam[] {
+    return this.groupExams[groupId] || [];
+  }
+
+  isExamListOpen(groupId: string): boolean {
+    return this.expandedGroupId === groupId;
+  }
+
+  trackByExamId(index: number, exam: StudentExam): string {
+    return exam.examId;
   }
 }
