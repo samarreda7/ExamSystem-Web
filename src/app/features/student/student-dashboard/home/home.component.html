@@ -1,1 +1,89 @@
-<p>home works!</p>
+<section class="mx-auto max-w-7xl px-3 py-4 sm:px-4 lg:px-5">
+  <div
+    class="overflow-hidden rounded-[2rem] border border-slate-200/10 bg-slate-900/65 shadow-2xl shadow-slate-950/35 backdrop-blur"
+  >
+    <div class="grid gap-5 p-4 lg:grid-cols-[1.15fr_0.85fr] lg:p-5">
+      <div
+        class="rounded-[1.75rem] bg-[linear-gradient(180deg,_rgba(30,41,59,0.95)_0%,_rgba(14,116,144,0.9)_48%,_rgba(15,23,42,0.96)_100%)] p-5 text-white sm:p-6"
+      >
+        <p
+          class="inline-flex rounded-full border border-white/15 bg-white/10 px-4 py-1 text-xs font-semibold uppercase tracking-[0.28em] text-slate-200"
+        >
+          Student home
+        </p>
+        <h1 class="mt-6 text-3xl font-bold tracking-tight sm:text-4xl">
+          Welcome back, {{ studentFirstName }}
+        </h1>
+        <p class="mt-4 max-w-2xl text-sm leading-7 text-slate-200/90 sm:text-base">
+          Keep track of your exams and study groups from one place. Use this dashboard to see
+          what is waiting for you and jump straight into the next step.
+        </p>
+
+        <div class="mt-8 grid gap-4 sm:grid-cols-2">
+          <div class="rounded-3xl border border-white/10 bg-white/10 p-5">
+            <p class="text-sm text-slate-300">Assigned exams</p>
+            <p class="mt-3 text-4xl font-bold">{{ examCount }}</p>
+            <p class="mt-2 text-sm text-slate-300">Total exams available for you right now.</p>
+          </div>
+
+          <div class="rounded-3xl border border-white/10 bg-white/10 p-5">
+            <p class="text-sm text-slate-300">Joined groups</p>
+            <p class="mt-3 text-4xl font-bold">{{ groupCount }}</p>
+            <p class="mt-2 text-sm text-slate-300">Groups you are currently part of.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="grid gap-4">
+        <div class="rounded-[1.75rem] border border-slate-200/10 bg-slate-950/45 p-5">
+          <p class="text-sm font-semibold uppercase tracking-[0.24em] text-slate-400">
+            Quick actions
+          </p>
+          <h2 class="mt-4 text-2xl font-bold text-white">What do you want to open?</h2>
+
+          <div class="mt-6 grid gap-3">
+            <a
+              routerLink="/student/exams"
+              class="block rounded-2xl border border-slate-200/10 bg-slate-900/70 p-4 transition hover:border-cyan-300/30 hover:bg-slate-800/80"
+            >
+              <p class="text-sm font-semibold text-slate-100">View exams</p>
+              <p class="mt-1 text-sm leading-6 text-slate-400">
+                Open your assigned exams and continue your work.
+              </p>
+            </a>
+
+            <a
+              routerLink="/student/groups"
+              class="block rounded-2xl border border-slate-200/10 bg-slate-900/70 p-4 transition hover:border-cyan-300/30 hover:bg-slate-800/80"
+            >
+              <p class="text-sm font-semibold text-slate-100">View groups</p>
+              <p class="mt-1 text-sm leading-6 text-slate-400">
+                Check the study groups you have joined.
+              </p>
+            </a>
+          </div>
+        </div>
+
+        <div
+          class="rounded-[1.75rem] border border-cyan-300/10 bg-[linear-gradient(135deg,_rgba(30,41,59,0.88)_0%,_rgba(8,47,73,0.92)_100%)] p-5"
+        >
+          <p class="text-sm font-semibold uppercase tracking-[0.24em] text-cyan-200/80">
+            Snapshot
+          </p>
+          <div class="mt-5 flex items-end justify-between gap-4">
+            <div>
+              <p class="text-3xl font-bold text-white">{{ examCount + groupCount }}</p>
+              <p class="mt-2 text-sm text-slate-300">
+                Combined exams and groups in your student workspace.
+              </p>
+            </div>
+            <div class="rounded-2xl bg-white/8 px-4 py-3 text-right">
+              <p class="text-xs uppercase tracking-[0.22em] text-slate-400">Role</p>
+              <p class="mt-1 text-lg font-semibold text-white">Student</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

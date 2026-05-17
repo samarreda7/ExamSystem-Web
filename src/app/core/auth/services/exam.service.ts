@@ -15,7 +15,11 @@ export class ExamService {
   }
 
   AddExam(name: string): Observable<string> {
-    return this.httpClient.post(environment.baseUrl + `Exam/add`, { name }, { responseType: 'text' });
+    return this.httpClient.post(
+      environment.baseUrl + `Exam/add`,
+      { name },
+      { responseType: 'text' },
+    );
   }
 
   getAllTeacherExam(): Observable<Exams[]> {
@@ -27,6 +31,14 @@ export class ExamService {
   }
 
   UpdateExamName(id: string, name: string): Observable<string> {
-    return this.httpClient.put(environment.baseUrl + `Exam/${id}`, { name }, { responseType: 'text' });
+    return this.httpClient.put(
+      environment.baseUrl + `Exam/${id}`,
+      { name },
+      { responseType: 'text' },
+    );
+  }
+  //for student
+  GetStudentExamCount(): Observable<number> {
+    return this.httpClient.get<number>(environment.baseUrl + `ExamGroup/students/exams/count`);
   }
 }

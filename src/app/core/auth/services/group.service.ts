@@ -64,4 +64,8 @@ export class GroupService {
   ExamCountOnGroup(groupId: string): Observable<any> {
     return this.httpClient.get(environment.baseUrl + `ExamGroup/groups/${groupId}/exams/count`);
   }
+  //for student
+  GetStudentGroupCount(): Observable<number> {
+    return this.httpClient.get<number>(environment.baseUrl + `StudentGroup/my-groups/count`);
+  }
 }
