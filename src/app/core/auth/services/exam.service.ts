@@ -4,6 +4,7 @@ import { Observable } from 'rxjs';
 import { environment } from '../../../../environments/environment.development';
 import { Exams } from '../../models/exams.interface';
 import { StudentExam } from '../../models/student-exam.interface';
+import { ExamQuestion } from '../../models/exam-question.interface';
 
 @Injectable({
   providedIn: 'root',
@@ -44,5 +45,13 @@ export class ExamService {
   }
   GetStudentExam(): Observable<StudentExam[]> {
     return this.httpClient.get<StudentExam[]>(environment.baseUrl + `ExamGroup/students/exams`);
+  }
+  GetExamsByGroupId(id: string): Observable<StudentExam[]> {
+    return this.httpClient.get<StudentExam[]>(environment.baseUrl + `ExamGroup/groups/${id}/exams`);
+  }
+  GetExam(id: string): Observable<ExamQuestion> {
+    return this.httpClient.get<ExamQuestion>(
+      environment.baseUrl + `ExamQuestion/${id}/questions/student`,
+    );
   }
 }
