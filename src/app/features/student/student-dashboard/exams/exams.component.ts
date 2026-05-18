@@ -1,6 +1,8 @@
 import { Component, inject, OnInit } from '@angular/core';
 import { ExamService } from '../../../../core/auth/services/exam.service';
 import { StudentExam } from '../../../../core/models/student-exam.interface';
+import { Router } from '@angular/router';
+import { forkJoin } from 'rxjs';
 
 @Component({
   selector: 'app-student-exams',
@@ -10,8 +12,10 @@ import { StudentExam } from '../../../../core/models/student-exam.interface';
 })
 export class ExamsComponent implements OnInit {
   private readonly examService = inject(ExamService);
+  private readonly router = inject(Router);
   ExamList: StudentExam[] = [];
   isLoading = false;
+  submittedExamMap: Record<string, boolean> = {};
 
   ngOnInit(): void {
     this.GetStudentExam();
@@ -22,6 +26,7 @@ export class ExamsComponent implements OnInit {
     this.examService.GetStudentExam().subscribe({
       next: (res) => {
         this.ExamList = res;
+        this.loadExamSubmissionStates(res);
         this.isLoading = false;
       },
       error: () => {
@@ -36,5 +41,37 @@ export class ExamsComponent implements OnInit {
 
   trackByExamId(index: number, exam: StudentExam): string {
     return exam.examId;
+  }
+
+  openExam(exam: StudentExam): void {
+    void this.router.navigate(['/student/exam', exam.examId]);
+  }
+
+  isExamSubmitted(examId: string): boolean {
+    return this.submittedExamMap[examId] ?? false;
+  }
+
+  private loadExamSubmissionStates(exams: StudentExam[]): void {
+    if (exams.length === 0) {
+      this.submittedExamMap = {};
+      return;
+    }
+
+    forkJoin(
+      exams.map((exam) => this.examService.IsExamSubmited(exam.examId)),
+    ).subscribe({
+      next: (results) => {
+        this.submittedExamMap = exams.reduce(
+          (map, exam, index) => {
+            map[exam.examId] = results[index];
+            return map;
+          },
+          {} as Record<string, boolean>,
+        );
+      },
+      error: () => {
+        this.submittedExamMap = {};
+      },
+    });
   }
 }

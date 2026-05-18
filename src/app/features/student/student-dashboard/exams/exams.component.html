@@ -72,9 +72,20 @@
                     <p class="mt-2 text-sm text-slate-400">Teacher: {{ exam.teacherName }}</p>
                   </div>
 
-                  <div class="rounded-3xl border border-white/10 bg-white/5 px-4 py-3 text-right">
-                    <p class="text-xs uppercase tracking-[0.22em] text-slate-500">Questions</p>
-                    <p class="mt-2 text-2xl font-bold text-white">{{ exam.questionsCount }}</p>
+                  <div class="flex items-center gap-3">
+                    <div class="rounded-3xl border border-white/10 bg-white/5 px-4 py-3 text-right">
+                      <p class="text-xs uppercase tracking-[0.22em] text-slate-500">Questions</p>
+                      <p class="mt-2 text-2xl font-bold text-white">{{ exam.questionsCount }}</p>
+                    </div>
+
+                    <button
+                      type="button"
+                      (click)="openExam(exam)"
+                      class="inline-flex items-center justify-center gap-2 rounded-2xl bg-gradient-to-r from-emerald-500 to-teal-500 px-4 py-3 text-sm font-semibold text-white shadow-lg shadow-slate-950/20 transition duration-200 hover:-translate-y-0.5 hover:from-emerald-400 hover:to-teal-400"
+                    >
+                      <i class="fa-solid fa-file-pen text-sm"></i>
+                      {{ isExamSubmitted(exam.examId) ? 'View score' : 'Show exam' }}
+                    </button>
                   </div>
                 </div>
               </article>
