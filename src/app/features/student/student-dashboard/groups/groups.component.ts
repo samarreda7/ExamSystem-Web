@@ -3,6 +3,8 @@ import { GroupService } from '../../../../core/auth/services/group.service';
 import { StudentGroup } from '../../../../core/models/student-group.interface';
 import { ExamService } from '../../../../core/auth/services/exam.service';
 import { StudentExam } from '../../../../core/models/student-exam.interface';
+import { Router } from '@angular/router';
+import { forkJoin } from 'rxjs';
 
 @Component({
   selector: 'app-student-groups',
@@ -13,11 +15,13 @@ import { StudentExam } from '../../../../core/models/student-exam.interface';
 export class GroupsComponent implements OnInit {
   private readonly groupService = inject(GroupService);
   private readonly examService = inject(ExamService);
+  private readonly router = inject(Router);
   GroupList: StudentGroup[] = [];
   isLoading = false;
   expandedGroupId: string | null = null;
   groupExams: Record<string, StudentExam[]> = {};
   loadingExamGroupId: string | null = null;
+  submittedExamMap: Record<string, boolean> = {};
 
   ngOnInit(): void {
     this.GetStudentGroups();
@@ -64,6 +68,7 @@ export class GroupsComponent implements OnInit {
     this.examService.GetExamsByGroupId(id).subscribe({
       next: (res) => {
         this.groupExams[id] = res;
+        this.loadExamSubmissionStates(res);
         this.loadingExamGroupId = null;
       },
       error: () => {
@@ -83,5 +88,34 @@ export class GroupsComponent implements OnInit {
 
   trackByExamId(index: number, exam: StudentExam): string {
     return exam.examId;
+  }
+
+  openExam(exam: StudentExam): void {
+    void this.router.navigate(['/student/exam', exam.examId]);
+  }
+
+  isExamSubmitted(examId: string): boolean {
+    return this.submittedExamMap[examId] ?? false;
+  }
+
+  private loadExamSubmissionStates(exams: StudentExam[]): void {
+    const examsToLoad = exams.filter((exam) => this.submittedExamMap[exam.examId] === undefined);
+
+    if (examsToLoad.length === 0) {
+      return;
+    }
+
+    forkJoin(
+      examsToLoad.map((exam) => this.examService.IsExamSubmited(exam.examId)),
+    ).subscribe({
+      next: (results) => {
+        const nextMap = { ...this.submittedExamMap };
+        examsToLoad.forEach((exam, index) => {
+          nextMap[exam.examId] = results[index];
+        });
+        this.submittedExamMap = nextMap;
+      },
+      error: () => {},
+    });
   }
 }
