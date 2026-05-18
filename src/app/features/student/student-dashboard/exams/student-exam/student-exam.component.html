@@ -1,0 +1,156 @@
+<section class="mx-auto max-w-5xl px-3 py-4 sm:px-4 lg:px-5">
+  <div
+    class="overflow-hidden rounded-[2rem] border border-slate-200/10 bg-slate-900/65 shadow-2xl shadow-slate-950/35 backdrop-blur"
+  >
+    <div class="p-4 lg:p-5">
+      <div class="rounded-[1.75rem] border border-slate-200/10 bg-slate-950/45 p-5 sm:p-6">
+        <div class="border-b border-slate-200/10 pb-5">
+          <p class="text-sm font-semibold uppercase tracking-[0.24em] text-slate-400">
+            {{ isSubmited ? 'Exam result' : 'Exam questions' }}
+          </p>
+          <h2 class="mt-2 text-2xl font-bold text-white">
+            {{
+              isSubmited
+                ? (examResult.examName || 'Submitted exam result')
+                : (examQuestions.length > 0 ? 'Answer all available questions' : 'Loading exam...')
+            }}
+          </h2>
+        </div>
+
+        @if (isLoading) {
+          <div class="mt-6 rounded-3xl border border-slate-200/10 bg-slate-900/70 p-6 text-slate-300">
+            Loading...
+          </div>
+        } @else if (isSubmited) {
+          <div class="mt-6 grid gap-4">
+            <div
+              class="rounded-3xl border border-emerald-300/15 bg-[linear-gradient(135deg,_rgba(16,185,129,0.16)_0%,_rgba(15,23,42,0.86)_100%)] p-6"
+            >
+              <p class="text-sm font-semibold uppercase tracking-[0.22em] text-emerald-100/80">
+                Submission complete
+              </p>
+              <div class="mt-4 flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
+                <div>
+                  <h3 class="text-3xl font-bold text-white">
+                    {{ examResult.examName || 'Exam result' }}
+                  </h3>
+                  <p class="mt-3 max-w-xl text-sm leading-6 text-slate-200/85">
+                    You already submitted this exam. Your saved score is shown below.
+                  </p>
+                </div>
+
+                <div class="rounded-3xl border border-white/10 bg-white/10 px-5 py-4 text-center">
+                  <p class="text-xs uppercase tracking-[0.22em] text-emerald-100/70">Final score</p>
+                  <p class="mt-2 text-3xl font-bold text-white">
+                    {{ examResult.studentScore }} / {{ examResult.examScore }}
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            <div class="rounded-3xl border border-slate-200/10 bg-slate-900/55 p-5 sm:p-6">
+              <div class="grid gap-4 sm:grid-cols-3">
+                <div class="rounded-2xl border border-slate-200/10 bg-white/5 p-4">
+                  <p class="text-xs uppercase tracking-[0.22em] text-slate-500">Score earned</p>
+                  <p class="mt-2 text-lg font-semibold text-white">
+                    {{ examResult.studentScore }}
+                  </p>
+                </div>
+                <div class="rounded-2xl border border-slate-200/10 bg-white/5 p-4">
+                  <p class="text-xs uppercase tracking-[0.22em] text-slate-500">Exam total</p>
+                  <p class="mt-2 text-lg font-semibold text-white">
+                    {{ examResult.examScore }}
+                  </p>
+                </div>
+                <div class="rounded-2xl border border-slate-200/10 bg-white/5 p-4">
+                  <p class="text-xs uppercase tracking-[0.22em] text-slate-500">Performance</p>
+                  <p class="mt-2 text-lg font-semibold text-white">
+                    {{
+                      examResult.examScore
+                        ? ((examResult.studentScore / examResult.examScore) * 100 | number: '1.0-0') + '%'
+                        : '0%'
+                    }}
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+        } @else if (examQuestions.length === 0) {
+          <div
+            class="mt-6 rounded-3xl border border-dashed border-slate-200/10 bg-slate-900/50 p-8 text-center"
+          >
+            <h3 class="text-xl font-semibold text-white">No questions found</h3>
+            <p class="mt-3 text-sm leading-6 text-slate-400">
+              This exam does not have student questions available right now.
+            </p>
+          </div>
+        } @else {
+          <div class="mt-6 space-y-6">
+            @for (question of examQuestions; track question.questionId) {
+              <div class="rounded-3xl border border-slate-200/10 bg-slate-900/55 p-4 sm:p-5">
+                <div class="border-b border-slate-200/10 pb-4">
+                  <div class="flex flex-wrap items-center gap-3">
+                    <span
+                      class="rounded-full border border-cyan-300/15 bg-cyan-400/10 px-3 py-1 text-xs font-semibold uppercase tracking-[0.2em] text-cyan-100"
+                    >
+                      Question {{ $index + 1 }}
+                    </span>
+                    <span class="text-sm text-slate-400">
+                      {{ question.type === 1 ? 'Single choice' : 'Question' }}
+                    </span>
+                  </div>
+                  <h3 class="mt-3 text-xl font-semibold text-white">{{ question.text }}</h3>
+                </div>
+
+                <div class="mt-4 space-y-3">
+                  @for (option of question.options; track option.id) {
+                    <button
+                      type="button"
+                      (click)="selectAnswer(question.questionId, option.id)"
+                      class="flex w-full items-start gap-4 rounded-3xl border px-4 py-4 text-left transition"
+                      [class.border-emerald-300/40]="isOptionSelected(question.questionId, option.id)"
+                      [class.bg-emerald-400/12]="isOptionSelected(question.questionId, option.id)"
+                      [class.text-white]="isOptionSelected(question.questionId, option.id)"
+                      [class.border-slate-200/10]="!isOptionSelected(question.questionId, option.id)"
+                      [class.bg-slate-900/70]="!isOptionSelected(question.questionId, option.id)"
+                      [class.text-slate-200]="!isOptionSelected(question.questionId, option.id)"
+                    >
+                      <span
+                        class="mt-0.5 grid h-8 w-8 shrink-0 place-items-center rounded-full border text-sm font-semibold"
+                        [class.border-emerald-300/40]="isOptionSelected(question.questionId, option.id)"
+                        [class.bg-emerald-400/20]="isOptionSelected(question.questionId, option.id)"
+                        [class.border-slate-200/10]="!isOptionSelected(question.questionId, option.id)"
+                        [class.bg-white/5]="!isOptionSelected(question.questionId, option.id)"
+                      >
+                        {{ $index + 1 }}
+                      </span>
+
+                      <div>
+                        <p class="text-base font-medium">{{ option.text }}</p>
+                        <p class="mt-1 text-sm text-slate-400">
+                          Click to choose this answer for the question.
+                        </p>
+                      </div>
+                    </button>
+                  }
+                </div>
+              </div>
+            }
+          </div>
+
+          <div class="mt-8 flex flex-col gap-3 border-t border-slate-200/10 pt-5 sm:flex-row sm:justify-end">
+            <button
+              type="button"
+              (click)="confirmSubmitExam()"
+              [disabled]="submitBody.answers.length !== examQuestions.length"
+              class="inline-flex items-center justify-center gap-2 rounded-2xl bg-gradient-to-r from-emerald-500 to-teal-500 px-5 py-3 text-sm font-semibold text-white shadow-lg shadow-slate-950/20 transition duration-200 hover:-translate-y-0.5 hover:from-emerald-400 hover:to-teal-400 disabled:cursor-not-allowed disabled:opacity-60"
+            >
+              <i class="fa-solid fa-paper-plane text-sm"></i>
+              Submit exam
+            </button>
+          </div>
+        }
+      </div>
+    </div>
+  </div>
+</section>

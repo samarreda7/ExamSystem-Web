@@ -17,14 +17,15 @@ import { ExamsComponent as TeacherExamsComponent } from './features/teacher/teac
 import { GroupsComponent as TeacherGroupsComponent } from './features/teacher/teacher-dashboard/groups/groups.component';
 import { QuestionsComponent } from './features/teacher/teacher-dashboard/exams/questions/questions.component';
 import { UpdateUserComponent } from './features/update-user/update-user.component';
+import { StudentExamComponent } from './features/student/student-dashboard/exams/student-exam/student-exam.component';
 
 export const routes: Routes = [
- { path: '', redirectTo: 'login', pathMatch: 'full' },
-    {
-     path: '',
-     component: AuthLayoutComponent,
-     canActivate:[guestGuard],
-     children: [
+  { path: '', redirectTo: 'login', pathMatch: 'full' },
+  {
+    path: '',
+    component: AuthLayoutComponent,
+    canActivate: [guestGuard],
+    children: [
       { path: 'login', component: LoginComponent },
       {
         path: 'register',
@@ -36,8 +37,8 @@ export const routes: Routes = [
         ],
       },
     ],
-   },
-   {
+  },
+  {
     path: '',
     component: MainLayoutComponent,
     canActivate: [authGuard],
@@ -54,6 +55,7 @@ export const routes: Routes = [
           { path: 'home', component: StudentHomeComponent },
           { path: 'exams', component: StudentExamsComponent },
           { path: 'groups', component: StudentGroupsComponent },
+          { path: 'exam/:id', component: StudentExamComponent }, 
         ],
       },
 
@@ -70,8 +72,7 @@ export const routes: Routes = [
           { path: 'groups', component: TeacherGroupsComponent },
         ],
       },
-
     ],
   },
-    { path: '**', component: NotfoundComponent },
+  { path: '**', component: NotfoundComponent },
 ];

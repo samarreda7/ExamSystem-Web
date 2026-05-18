@@ -5,6 +5,8 @@ import { environment } from '../../../../environments/environment.development';
 import { Exams } from '../../models/exams.interface';
 import { StudentExam } from '../../models/student-exam.interface';
 import { ExamQuestion } from '../../models/exam-question.interface';
+import { SubmitExam } from '../../models/submit-exam.interface';
+import { ExamResult } from '../../models/exam-result.interface';
 
 @Injectable({
   providedIn: 'root',
@@ -49,9 +51,22 @@ export class ExamService {
   GetExamsByGroupId(id: string): Observable<StudentExam[]> {
     return this.httpClient.get<StudentExam[]>(environment.baseUrl + `ExamGroup/groups/${id}/exams`);
   }
-  GetExam(id: string): Observable<ExamQuestion> {
-    return this.httpClient.get<ExamQuestion>(
+  GetExam(id: string): Observable<ExamQuestion[]> {
+    return this.httpClient.get<ExamQuestion[]>(
       environment.baseUrl + `ExamQuestion/${id}/questions/student`,
     );
+  }
+  SubmitExam(body: SubmitExam): Observable<any> {
+    return this.httpClient.post(environment.baseUrl + `StudentExamSubmission/submit`, body, {
+      responseType: 'text',
+    });
+  }
+  IsExamSubmited(examId: string): Observable<boolean> {
+    return this.httpClient.get<boolean>(
+      environment.baseUrl + `StudentExamSubmission/${examId}/is-submitted`,
+    );
+  }
+  getExamResult(examId: string): Observable<ExamResult> {
+    return this.httpClient.get<ExamResult>(environment.baseUrl + `StudentExamResult/${examId}`);
   }
 }
